@@ -759,34 +759,222 @@ const CLIMATE_SCORE = { mild: 8, warm: 9, cold: 3, hot: 5, tropical: 6, dry: 6 }
 
 // Minimal world-cities list for the Add-a-city dropdown autofill.
 const WORLD_CITIES = [
-  {n:'Lisbon',c:'Portugal',f:'🇵🇹'},{n:'Porto',c:'Portugal',f:'🇵🇹'},{n:'Algarve',c:'Portugal',f:'🇵🇹'},{n:'Madeira',c:'Portugal',f:'🇵🇹'},{n:'Cascais',c:'Portugal',f:'🇵🇹'},
-  {n:'Valencia',c:'Spain',f:'🇪🇸'},{n:'Málaga',c:'Spain',f:'🇪🇸'},{n:'Alicante',c:'Spain',f:'🇪🇸'},{n:'Palma de Mallorca',c:'Spain',f:'🇪🇸'},{n:'Barcelona',c:'Spain',f:'🇪🇸'},{n:'Madrid',c:'Spain',f:'🇪🇸'},{n:'Seville',c:'Spain',f:'🇪🇸'},{n:'Granada',c:'Spain',f:'🇪🇸'},{n:'Tenerife',c:'Spain',f:'🇪🇸'},
-  {n:'Rome',c:'Italy',f:'🇮🇹'},{n:'Florence',c:'Italy',f:'🇮🇹'},{n:'Lucca',c:'Italy',f:'🇮🇹'},{n:'Bologna',c:'Italy',f:'🇮🇹'},{n:'Lecce',c:'Italy',f:'🇮🇹'},{n:'Puglia',c:'Italy',f:'🇮🇹'},{n:'Palermo',c:'Italy',f:'🇮🇹'},{n:'Venice',c:'Italy',f:'🇮🇹'},
-  {n:'Athens',c:'Greece',f:'🇬🇷'},{n:'Chania',c:'Greece',f:'🇬🇷'},{n:'Rhodes',c:'Greece',f:'🇬🇷'},{n:'Crete',c:'Greece',f:'🇬🇷'},
-  {n:'Nice',c:'France',f:'🇫🇷'},{n:'Montpellier',c:'France',f:'🇫🇷'},{n:'Marseille',c:'France',f:'🇫🇷'},{n:'Bordeaux',c:'France',f:'🇫🇷'},
-  {n:'Lake Chapala',c:'Mexico',f:'🇲🇽'},{n:'Mérida',c:'Mexico',f:'🇲🇽'},{n:'San Miguel de Allende',c:'Mexico',f:'🇲🇽'},{n:'Puerto Vallarta',c:'Mexico',f:'🇲🇽'},{n:'Ensenada',c:'Mexico',f:'🇲🇽'},{n:'Oaxaca',c:'Mexico',f:'🇲🇽'},{n:'Playa del Carmen',c:'Mexico',f:'🇲🇽'},
-  {n:'Panama City',c:'Panama',f:'🇵🇦'},{n:'Boquete',c:'Panama',f:'🇵🇦'},{n:'Coronado',c:'Panama',f:'🇵🇦'},
-  {n:'Atenas',c:'Costa Rica',f:'🇨🇷'},{n:'Tamarindo',c:'Costa Rica',f:'🇨🇷'},{n:'San José',c:'Costa Rica',f:'🇨🇷'},
-  {n:'Chiang Mai',c:'Thailand',f:'🇹🇭'},{n:'Hua Hin',c:'Thailand',f:'🇹🇭'},{n:'Phuket',c:'Thailand',f:'🇹🇭'},{n:'Bangkok',c:'Thailand',f:'🇹🇭'},
-  {n:'Penang',c:'Malaysia',f:'🇲🇾'},{n:'Kuala Lumpur',c:'Malaysia',f:'🇲🇾'},{n:'Langkawi',c:'Malaysia',f:'🇲🇾'},
-  {n:'Dumaguete',c:'Philippines',f:'🇵🇭'},{n:'Cebu',c:'Philippines',f:'🇵🇭'},
-  {n:'Da Nang',c:'Vietnam',f:'🇻🇳'},{n:'Nha Trang',c:'Vietnam',f:'🇻🇳'},{n:'Hoi An',c:'Vietnam',f:'🇻🇳'},
-  {n:'Cuenca',c:'Ecuador',f:'🇪🇨'},{n:'Quito',c:'Ecuador',f:'🇪🇨'},
-  {n:'Medellín',c:'Colombia',f:'🇨🇴'},{n:'Cartagena',c:'Colombia',f:'🇨🇴'},
-  {n:'Montevideo',c:'Uruguay',f:'🇺🇾'},
-  {n:'Ambergris Caye',c:'Belize',f:'🇧🇿'},
-  {n:'Dubai',c:'UAE',f:'🇦🇪'},
-  {n:'Limassol',c:'Cyprus',f:'🇨🇾'},{n:'Paphos',c:'Cyprus',f:'🇨🇾'},
-  {n:'Valletta',c:'Malta',f:'🇲🇹'},{n:'Sliema',c:'Malta',f:'🇲🇹'},
-  {n:'Kotor',c:'Montenegro',f:'🇲🇪'},{n:'Budva',c:'Montenegro',f:'🇲🇪'},
-  {n:'Split',c:'Croatia',f:'🇭🇷'},{n:'Dubrovnik',c:'Croatia',f:'🇭🇷'},
-  {n:'Antalya',c:'Turkey',f:'🇹🇷'},{n:'Alanya',c:'Turkey',f:'🇹🇷'},
-  {n:'Buenos Aires',c:'Argentina',f:'🇦🇷'},
-  {n:'Santiago',c:'Chile',f:'🇨🇱'},
-  {n:'Fukuoka',c:'Japan',f:'🇯🇵'},{n:'Tokyo',c:'Japan',f:'🇯🇵'},
-  {n:'Gold Coast',c:'Australia',f:'🇦🇺'},{n:'Perth',c:'Australia',f:'🇦🇺'},
-  {n:'Auckland',c:'New Zealand',f:'🇳🇿'},
-  {n:'Tbilisi',c:'Georgia',f:'🇬🇪'},{n:'Batumi',c:'Georgia',f:'🇬🇪'},
+  // ===== EUROPE =====
+  // Portugal
+  {n:'Lisbon',c:'Portugal',f:'🇵🇹'},{n:'Porto',c:'Portugal',f:'🇵🇹'},{n:'Faro',c:'Portugal',f:'🇵🇹'},{n:'Lagos',c:'Portugal',f:'🇵🇹'},{n:'Albufeira',c:'Portugal',f:'🇵🇹'},{n:'Portimão',c:'Portugal',f:'🇵🇹'},{n:'Tavira',c:'Portugal',f:'🇵🇹'},{n:'Cascais',c:'Portugal',f:'🇵🇹'},{n:'Sintra',c:'Portugal',f:'🇵🇹'},{n:'Braga',c:'Portugal',f:'🇵🇹'},{n:'Coimbra',c:'Portugal',f:'🇵🇹'},{n:'Évora',c:'Portugal',f:'🇵🇹'},{n:'Setúbal',c:'Portugal',f:'🇵🇹'},{n:'Funchal',c:'Portugal',f:'🇵🇹'},{n:'Ponta Delgada',c:'Portugal',f:'🇵🇹'},{n:'Madeira',c:'Portugal',f:'🇵🇹'},{n:'Aveiro',c:'Portugal',f:'🇵🇹'},{n:'Guimarães',c:'Portugal',f:'🇵🇹'},{n:'Viseu',c:'Portugal',f:'🇵🇹'},{n:'Leiria',c:'Portugal',f:'🇵🇹'},
+  // Spain
+  {n:'Madrid',c:'Spain',f:'🇪🇸'},{n:'Barcelona',c:'Spain',f:'🇪🇸'},{n:'Valencia',c:'Spain',f:'🇪🇸'},{n:'Seville',c:'Spain',f:'🇪🇸'},{n:'Málaga',c:'Spain',f:'🇪🇸'},{n:'Palma de Mallorca',c:'Spain',f:'🇪🇸'},{n:'Alicante',c:'Spain',f:'🇪🇸'},{n:'Granada',c:'Spain',f:'🇪🇸'},{n:'Bilbao',c:'Spain',f:'🇪🇸'},{n:'San Sebastián',c:'Spain',f:'🇪🇸'},{n:'Zaragoza',c:'Spain',f:'🇪🇸'},{n:'Murcia',c:'Spain',f:'🇪🇸'},{n:'Córdoba',c:'Spain',f:'🇪🇸'},{n:'Las Palmas',c:'Spain',f:'🇪🇸'},{n:'Santa Cruz de Tenerife',c:'Spain',f:'🇪🇸'},{n:'Marbella',c:'Spain',f:'🇪🇸'},{n:'Ibiza',c:'Spain',f:'🇪🇸'},{n:'Vigo',c:'Spain',f:'🇪🇸'},{n:'Salamanca',c:'Spain',f:'🇪🇸'},{n:'Toledo',c:'Spain',f:'🇪🇸'},{n:'A Coruña',c:'Spain',f:'🇪🇸'},{n:'Pamplona',c:'Spain',f:'🇪🇸'},{n:'Jerez de la Frontera',c:'Spain',f:'🇪🇸'},{n:'Girona',c:'Spain',f:'🇪🇸'},{n:'Cádiz',c:'Spain',f:'🇪🇸'},{n:'Valladolid',c:'Spain',f:'🇪🇸'},{n:'Oviedo',c:'Spain',f:'🇪🇸'},{n:'Tarragona',c:'Spain',f:'🇪🇸'},{n:'Burgos',c:'Spain',f:'🇪🇸'},{n:'Santander',c:'Spain',f:'🇪🇸'},{n:'Gijón',c:'Spain',f:'🇪🇸'},{n:'Benidorm',c:'Spain',f:'🇪🇸'},{n:'Fuerteventura',c:'Spain',f:'🇪🇸'},{n:'Lanzarote',c:'Spain',f:'🇪🇸'},{n:'Almería',c:'Spain',f:'🇪🇸'},{n:'Huelva',c:'Spain',f:'🇪🇸'},{n:'Logroño',c:'Spain',f:'🇪🇸'},{n:'Albacete',c:'Spain',f:'🇪🇸'},
+  // France
+  {n:'Paris',c:'France',f:'🇫🇷'},{n:'Lyon',c:'France',f:'🇫🇷'},{n:'Marseille',c:'France',f:'🇫🇷'},{n:'Nice',c:'France',f:'🇫🇷'},{n:'Toulouse',c:'France',f:'🇫🇷'},{n:'Bordeaux',c:'France',f:'🇫🇷'},{n:'Nantes',c:'France',f:'🇫🇷'},{n:'Strasbourg',c:'France',f:'🇫🇷'},{n:'Montpellier',c:'France',f:'🇫🇷'},{n:'Lille',c:'France',f:'🇫🇷'},{n:'Rennes',c:'France',f:'🇫🇷'},{n:'Reims',c:'France',f:'🇫🇷'},{n:'Grenoble',c:'France',f:'🇫🇷'},{n:'Toulon',c:'France',f:'🇫🇷'},{n:'Angers',c:'France',f:'🇫🇷'},{n:'Dijon',c:'France',f:'🇫🇷'},{n:'Aix-en-Provence',c:'France',f:'🇫🇷'},{n:'Cannes',c:'France',f:'🇫🇷'},{n:'Antibes',c:'France',f:'🇫🇷'},{n:'Avignon',c:'France',f:'🇫🇷'},{n:'La Rochelle',c:'France',f:'🇫🇷'},{n:'Biarritz',c:'France',f:'🇫🇷'},{n:'Perpignan',c:'France',f:'🇫🇷'},{n:'Saint-Tropez',c:'France',f:'🇫🇷'},{n:'Chamonix',c:'France',f:'🇫🇷'},{n:'Nîmes',c:'France',f:'🇫🇷'},{n:'Tours',c:'France',f:'🇫🇷'},{n:'Clermont-Ferrand',c:'France',f:'🇫🇷'},
+  // Italy
+  {n:'Rome',c:'Italy',f:'🇮🇹'},{n:'Milan',c:'Italy',f:'🇮🇹'},{n:'Naples',c:'Italy',f:'🇮🇹'},{n:'Turin',c:'Italy',f:'🇮🇹'},{n:'Palermo',c:'Italy',f:'🇮🇹'},{n:'Florence',c:'Italy',f:'🇮🇹'},{n:'Bologna',c:'Italy',f:'🇮🇹'},{n:'Venice',c:'Italy',f:'🇮🇹'},{n:'Verona',c:'Italy',f:'🇮🇹'},{n:'Genoa',c:'Italy',f:'🇮🇹'},{n:'Catania',c:'Italy',f:'🇮🇹'},{n:'Bari',c:'Italy',f:'🇮🇹'},{n:'Trieste',c:'Italy',f:'🇮🇹'},{n:'Padua',c:'Italy',f:'🇮🇹'},{n:'Lecce',c:'Italy',f:'🇮🇹'},{n:'Lucca',c:'Italy',f:'🇮🇹'},{n:'Perugia',c:'Italy',f:'🇮🇹'},{n:'Siena',c:'Italy',f:'🇮🇹'},{n:'Modena',c:'Italy',f:'🇮🇹'},{n:'Rimini',c:'Italy',f:'🇮🇹'},{n:'Pisa',c:'Italy',f:'🇮🇹'},{n:'Bergamo',c:'Italy',f:'🇮🇹'},{n:'Parma',c:'Italy',f:'🇮🇹'},{n:'Amalfi',c:'Italy',f:'🇮🇹'},{n:'Taormina',c:'Italy',f:'🇮🇹'},{n:'Como',c:'Italy',f:'🇮🇹'},{n:'Sorrento',c:'Italy',f:'🇮🇹'},{n:'Positano',c:'Italy',f:'🇮🇹'},{n:'Cagliari',c:'Italy',f:'🇮🇹'},{n:'Trento',c:'Italy',f:'🇮🇹'},
+  // Germany
+  {n:'Berlin',c:'Germany',f:'🇩🇪'},{n:'Munich',c:'Germany',f:'🇩🇪'},{n:'Hamburg',c:'Germany',f:'🇩🇪'},{n:'Cologne',c:'Germany',f:'🇩🇪'},{n:'Frankfurt',c:'Germany',f:'🇩🇪'},{n:'Stuttgart',c:'Germany',f:'🇩🇪'},{n:'Düsseldorf',c:'Germany',f:'🇩🇪'},{n:'Dortmund',c:'Germany',f:'🇩🇪'},{n:'Essen',c:'Germany',f:'🇩🇪'},{n:'Leipzig',c:'Germany',f:'🇩🇪'},{n:'Dresden',c:'Germany',f:'🇩🇪'},{n:'Hanover',c:'Germany',f:'🇩🇪'},{n:'Nuremberg',c:'Germany',f:'🇩🇪'},{n:'Duisburg',c:'Germany',f:'🇩🇪'},{n:'Bochum',c:'Germany',f:'🇩🇪'},{n:'Wuppertal',c:'Germany',f:'🇩🇪'},{n:'Bielefeld',c:'Germany',f:'🇩🇪'},{n:'Bonn',c:'Germany',f:'🇩🇪'},{n:'Münster',c:'Germany',f:'🇩🇪'},{n:'Karlsruhe',c:'Germany',f:'🇩🇪'},{n:'Mannheim',c:'Germany',f:'🇩🇪'},{n:'Augsburg',c:'Germany',f:'🇩🇪'},{n:'Wiesbaden',c:'Germany',f:'🇩🇪'},{n:'Freiburg',c:'Germany',f:'🇩🇪'},{n:'Heidelberg',c:'Germany',f:'🇩🇪'},{n:'Potsdam',c:'Germany',f:'🇩🇪'},{n:'Rostock',c:'Germany',f:'🇩🇪'},{n:'Kiel',c:'Germany',f:'🇩🇪'},
+  // UK
+  {n:'London',c:'UK',f:'🇬🇧'},{n:'Birmingham',c:'UK',f:'🇬🇧'},{n:'Manchester',c:'UK',f:'🇬🇧'},{n:'Glasgow',c:'UK',f:'🇬🇧'},{n:'Liverpool',c:'UK',f:'🇬🇧'},{n:'Leeds',c:'UK',f:'🇬🇧'},{n:'Sheffield',c:'UK',f:'🇬🇧'},{n:'Edinburgh',c:'UK',f:'🇬🇧'},{n:'Bristol',c:'UK',f:'🇬🇧'},{n:'Cardiff',c:'UK',f:'🇬🇧'},{n:'Belfast',c:'UK',f:'🇬🇧'},{n:'Nottingham',c:'UK',f:'🇬🇧'},{n:'Newcastle',c:'UK',f:'🇬🇧'},{n:'Leicester',c:'UK',f:'🇬🇧'},{n:'Brighton',c:'UK',f:'🇬🇧'},{n:'Oxford',c:'UK',f:'🇬🇧'},{n:'Cambridge',c:'UK',f:'🇬🇧'},{n:'Bath',c:'UK',f:'🇬🇧'},{n:'York',c:'UK',f:'🇬🇧'},{n:'Southampton',c:'UK',f:'🇬🇧'},{n:'Portsmouth',c:'UK',f:'🇬🇧'},{n:'Dundee',c:'UK',f:'🇬🇧'},{n:'Aberdeen',c:'UK',f:'🇬🇧'},{n:'Plymouth',c:'UK',f:'🇬🇧'},{n:'Reading',c:'UK',f:'🇬🇧'},{n:'Inverness',c:'UK',f:'🇬🇧'},{n:'Exeter',c:'UK',f:'🇬🇧'},{n:'Norwich',c:'UK',f:'🇬🇧'},
+  // Ireland
+  {n:'Dublin',c:'Ireland',f:'🇮🇪'},{n:'Cork',c:'Ireland',f:'🇮🇪'},{n:'Galway',c:'Ireland',f:'🇮🇪'},{n:'Limerick',c:'Ireland',f:'🇮🇪'},{n:'Waterford',c:'Ireland',f:'🇮🇪'},{n:'Kilkenny',c:'Ireland',f:'🇮🇪'},
+  // Netherlands
+  {n:'Amsterdam',c:'Netherlands',f:'🇳🇱'},{n:'Rotterdam',c:'Netherlands',f:'🇳🇱'},{n:'The Hague',c:'Netherlands',f:'🇳🇱'},{n:'Utrecht',c:'Netherlands',f:'🇳🇱'},{n:'Eindhoven',c:'Netherlands',f:'🇳🇱'},{n:'Groningen',c:'Netherlands',f:'🇳🇱'},{n:'Tilburg',c:'Netherlands',f:'🇳🇱'},{n:'Breda',c:'Netherlands',f:'🇳🇱'},{n:'Nijmegen',c:'Netherlands',f:'🇳🇱'},{n:'Haarlem',c:'Netherlands',f:'🇳🇱'},{n:'Delft',c:'Netherlands',f:'🇳🇱'},{n:'Leiden',c:'Netherlands',f:'🇳🇱'},{n:'Arnhem',c:'Netherlands',f:'🇳🇱'},{n:'Maastricht',c:'Netherlands',f:'🇳🇱'},
+  // Belgium
+  {n:'Brussels',c:'Belgium',f:'🇧🇪'},{n:'Antwerp',c:'Belgium',f:'🇧🇪'},{n:'Ghent',c:'Belgium',f:'🇧🇪'},{n:'Bruges',c:'Belgium',f:'🇧🇪'},{n:'Liège',c:'Belgium',f:'🇧🇪'},{n:'Namur',c:'Belgium',f:'🇧🇪'},{n:'Leuven',c:'Belgium',f:'🇧🇪'},{n:'Mechelen',c:'Belgium',f:'🇧🇪'},{n:'Charleroi',c:'Belgium',f:'🇧🇪'},{n:'Ostend',c:'Belgium',f:'🇧🇪'},
+  // Switzerland
+  {n:'Zürich',c:'Switzerland',f:'🇨🇭'},{n:'Geneva',c:'Switzerland',f:'🇨🇭'},{n:'Basel',c:'Switzerland',f:'🇨🇭'},{n:'Lausanne',c:'Switzerland',f:'🇨🇭'},{n:'Bern',c:'Switzerland',f:'🇨🇭'},{n:'Winterthur',c:'Switzerland',f:'🇨🇭'},{n:'Lucerne',c:'Switzerland',f:'🇨🇭'},{n:'Zug',c:'Switzerland',f:'🇨🇭'},{n:'St Gallen',c:'Switzerland',f:'🇨🇭'},{n:'Lugano',c:'Switzerland',f:'🇨🇭'},{n:'Interlaken',c:'Switzerland',f:'🇨🇭'},{n:'Montreux',c:'Switzerland',f:'🇨🇭'},{n:'Zermatt',c:'Switzerland',f:'🇨🇭'},
+  // Austria
+  {n:'Vienna',c:'Austria',f:'🇦🇹'},{n:'Graz',c:'Austria',f:'🇦🇹'},{n:'Linz',c:'Austria',f:'🇦🇹'},{n:'Salzburg',c:'Austria',f:'🇦🇹'},{n:'Innsbruck',c:'Austria',f:'🇦🇹'},{n:'Klagenfurt',c:'Austria',f:'🇦🇹'},{n:'Villach',c:'Austria',f:'🇦🇹'},{n:'Bregenz',c:'Austria',f:'🇦🇹'},
+  // Scandinavia
+  {n:'Stockholm',c:'Sweden',f:'🇸🇪'},{n:'Gothenburg',c:'Sweden',f:'🇸🇪'},{n:'Malmö',c:'Sweden',f:'🇸🇪'},{n:'Uppsala',c:'Sweden',f:'🇸🇪'},{n:'Linköping',c:'Sweden',f:'🇸🇪'},{n:'Örebro',c:'Sweden',f:'🇸🇪'},{n:'Västerås',c:'Sweden',f:'🇸🇪'},{n:'Helsingborg',c:'Sweden',f:'🇸🇪'},{n:'Lund',c:'Sweden',f:'🇸🇪'},{n:'Umeå',c:'Sweden',f:'🇸🇪'},{n:'Jönköping',c:'Sweden',f:'🇸🇪'},
+  {n:'Oslo',c:'Norway',f:'🇳🇴'},{n:'Bergen',c:'Norway',f:'🇳🇴'},{n:'Trondheim',c:'Norway',f:'🇳🇴'},{n:'Stavanger',c:'Norway',f:'🇳🇴'},{n:'Tromsø',c:'Norway',f:'🇳🇴'},{n:'Kristiansand',c:'Norway',f:'🇳🇴'},{n:'Drammen',c:'Norway',f:'🇳🇴'},{n:'Ålesund',c:'Norway',f:'🇳🇴'},
+  {n:'Copenhagen',c:'Denmark',f:'🇩🇰'},{n:'Aarhus',c:'Denmark',f:'🇩🇰'},{n:'Odense',c:'Denmark',f:'🇩🇰'},{n:'Aalborg',c:'Denmark',f:'🇩🇰'},{n:'Esbjerg',c:'Denmark',f:'🇩🇰'},
+  {n:'Helsinki',c:'Finland',f:'🇫🇮'},{n:'Tampere',c:'Finland',f:'🇫🇮'},{n:'Turku',c:'Finland',f:'🇫🇮'},{n:'Oulu',c:'Finland',f:'🇫🇮'},{n:'Jyväskylä',c:'Finland',f:'🇫🇮'},{n:'Espoo',c:'Finland',f:'🇫🇮'},{n:'Vantaa',c:'Finland',f:'🇫🇮'},{n:'Lahti',c:'Finland',f:'🇫🇮'},
+  {n:'Reykjavik',c:'Iceland',f:'🇮🇸'},{n:'Akureyri',c:'Iceland',f:'🇮🇸'},{n:'Keflavík',c:'Iceland',f:'🇮🇸'},
+  // Poland
+  {n:'Warsaw',c:'Poland',f:'🇵🇱'},{n:'Kraków',c:'Poland',f:'🇵🇱'},{n:'Łódź',c:'Poland',f:'🇵🇱'},{n:'Wrocław',c:'Poland',f:'🇵🇱'},{n:'Poznań',c:'Poland',f:'🇵🇱'},{n:'Gdańsk',c:'Poland',f:'🇵🇱'},{n:'Szczecin',c:'Poland',f:'🇵🇱'},{n:'Lublin',c:'Poland',f:'🇵🇱'},{n:'Katowice',c:'Poland',f:'🇵🇱'},{n:'Bydgoszcz',c:'Poland',f:'🇵🇱'},{n:'Białystok',c:'Poland',f:'🇵🇱'},{n:'Toruń',c:'Poland',f:'🇵🇱'},{n:'Rzeszów',c:'Poland',f:'🇵🇱'},{n:'Gdynia',c:'Poland',f:'🇵🇱'},
+  // Czech / Slovakia / Hungary
+  {n:'Prague',c:'Czechia',f:'🇨🇿'},{n:'Brno',c:'Czechia',f:'🇨🇿'},{n:'Ostrava',c:'Czechia',f:'🇨🇿'},{n:'Plzeň',c:'Czechia',f:'🇨🇿'},{n:'Olomouc',c:'Czechia',f:'🇨🇿'},{n:'Liberec',c:'Czechia',f:'🇨🇿'},{n:'Karlovy Vary',c:'Czechia',f:'🇨🇿'},
+  {n:'Bratislava',c:'Slovakia',f:'🇸🇰'},{n:'Košice',c:'Slovakia',f:'🇸🇰'},{n:'Prešov',c:'Slovakia',f:'🇸🇰'},{n:'Žilina',c:'Slovakia',f:'🇸🇰'},
+  {n:'Budapest',c:'Hungary',f:'🇭🇺'},{n:'Debrecen',c:'Hungary',f:'🇭🇺'},{n:'Szeged',c:'Hungary',f:'🇭🇺'},{n:'Miskolc',c:'Hungary',f:'🇭🇺'},{n:'Pécs',c:'Hungary',f:'🇭🇺'},{n:'Győr',c:'Hungary',f:'🇭🇺'},
+  // Romania / Bulgaria / Serbia
+  {n:'Bucharest',c:'Romania',f:'🇷🇴'},{n:'Cluj-Napoca',c:'Romania',f:'🇷🇴'},{n:'Timișoara',c:'Romania',f:'🇷🇴'},{n:'Iași',c:'Romania',f:'🇷🇴'},{n:'Constanța',c:'Romania',f:'🇷🇴'},{n:'Craiova',c:'Romania',f:'🇷🇴'},{n:'Brașov',c:'Romania',f:'🇷🇴'},{n:'Oradea',c:'Romania',f:'🇷🇴'},{n:'Sibiu',c:'Romania',f:'🇷🇴'},
+  {n:'Sofia',c:'Bulgaria',f:'🇧🇬'},{n:'Plovdiv',c:'Bulgaria',f:'🇧🇬'},{n:'Varna',c:'Bulgaria',f:'🇧🇬'},{n:'Burgas',c:'Bulgaria',f:'🇧🇬'},{n:'Ruse',c:'Bulgaria',f:'🇧🇬'},{n:'Veliko Tarnovo',c:'Bulgaria',f:'🇧🇬'},
+  {n:'Belgrade',c:'Serbia',f:'🇷🇸'},{n:'Novi Sad',c:'Serbia',f:'🇷🇸'},{n:'Niš',c:'Serbia',f:'🇷🇸'},{n:'Kragujevac',c:'Serbia',f:'🇷🇸'},{n:'Subotica',c:'Serbia',f:'🇷🇸'},
+  // Balkans
+  {n:'Zagreb',c:'Croatia',f:'🇭🇷'},{n:'Split',c:'Croatia',f:'🇭🇷'},{n:'Rijeka',c:'Croatia',f:'🇭🇷'},{n:'Dubrovnik',c:'Croatia',f:'🇭🇷'},{n:'Pula',c:'Croatia',f:'🇭🇷'},{n:'Zadar',c:'Croatia',f:'🇭🇷'},{n:'Osijek',c:'Croatia',f:'🇭🇷'},{n:'Rovinj',c:'Croatia',f:'🇭🇷'},
+  {n:'Ljubljana',c:'Slovenia',f:'🇸🇮'},{n:'Maribor',c:'Slovenia',f:'🇸🇮'},{n:'Celje',c:'Slovenia',f:'🇸🇮'},{n:'Koper',c:'Slovenia',f:'🇸🇮'},
+  {n:'Sarajevo',c:'Bosnia',f:'🇧🇦'},{n:'Mostar',c:'Bosnia',f:'🇧🇦'},{n:'Banja Luka',c:'Bosnia',f:'🇧🇦'},
+  {n:'Podgorica',c:'Montenegro',f:'🇲🇪'},{n:'Kotor',c:'Montenegro',f:'🇲🇪'},{n:'Budva',c:'Montenegro',f:'🇲🇪'},{n:'Tivat',c:'Montenegro',f:'🇲🇪'},{n:'Herceg Novi',c:'Montenegro',f:'🇲🇪'},
+  {n:'Tirana',c:'Albania',f:'🇦🇱'},{n:'Durrës',c:'Albania',f:'🇦🇱'},{n:'Saranda',c:'Albania',f:'🇦🇱'},{n:'Vlorë',c:'Albania',f:'🇦🇱'},{n:'Shkodër',c:'Albania',f:'🇦🇱'},
+  {n:'Skopje',c:'North Macedonia',f:'🇲🇰'},{n:'Ohrid',c:'North Macedonia',f:'🇲🇰'},{n:'Bitola',c:'North Macedonia',f:'🇲🇰'},
+  {n:'Pristina',c:'Kosovo',f:'🇽🇰'},{n:'Prizren',c:'Kosovo',f:'🇽🇰'},
+  // Greece
+  {n:'Athens',c:'Greece',f:'🇬🇷'},{n:'Thessaloniki',c:'Greece',f:'🇬🇷'},{n:'Patras',c:'Greece',f:'🇬🇷'},{n:'Heraklion',c:'Greece',f:'🇬🇷'},{n:'Larissa',c:'Greece',f:'🇬🇷'},{n:'Volos',c:'Greece',f:'🇬🇷'},{n:'Rhodes',c:'Greece',f:'🇬🇷'},{n:'Chania',c:'Greece',f:'🇬🇷'},{n:'Mykonos',c:'Greece',f:'🇬🇷'},{n:'Santorini',c:'Greece',f:'🇬🇷'},{n:'Corfu',c:'Greece',f:'🇬🇷'},{n:'Nafplio',c:'Greece',f:'🇬🇷'},
+  // Baltics
+  {n:'Tallinn',c:'Estonia',f:'🇪🇪'},{n:'Tartu',c:'Estonia',f:'🇪🇪'},{n:'Pärnu',c:'Estonia',f:'🇪🇪'},
+  {n:'Riga',c:'Latvia',f:'🇱🇻'},{n:'Daugavpils',c:'Latvia',f:'🇱🇻'},{n:'Jūrmala',c:'Latvia',f:'🇱🇻'},
+  {n:'Vilnius',c:'Lithuania',f:'🇱🇹'},{n:'Kaunas',c:'Lithuania',f:'🇱🇹'},{n:'Klaipėda',c:'Lithuania',f:'🇱🇹'},
+  // Eastern Europe
+  {n:'Kyiv',c:'Ukraine',f:'🇺🇦'},{n:'Kharkiv',c:'Ukraine',f:'🇺🇦'},{n:'Odesa',c:'Ukraine',f:'🇺🇦'},{n:'Dnipro',c:'Ukraine',f:'🇺🇦'},{n:'Lviv',c:'Ukraine',f:'🇺🇦'},
+  {n:'Minsk',c:'Belarus',f:'🇧🇾'},{n:'Gomel',c:'Belarus',f:'🇧🇾'},{n:'Brest',c:'Belarus',f:'🇧🇾'},
+  {n:'Chișinău',c:'Moldova',f:'🇲🇩'},{n:'Bălți',c:'Moldova',f:'🇲🇩'},
+  {n:'Moscow',c:'Russia',f:'🇷🇺'},{n:'Saint Petersburg',c:'Russia',f:'🇷🇺'},{n:'Novosibirsk',c:'Russia',f:'🇷🇺'},{n:'Yekaterinburg',c:'Russia',f:'🇷🇺'},{n:'Kazan',c:'Russia',f:'🇷🇺'},{n:'Nizhny Novgorod',c:'Russia',f:'🇷🇺'},{n:'Samara',c:'Russia',f:'🇷🇺'},{n:'Krasnodar',c:'Russia',f:'🇷🇺'},{n:'Sochi',c:'Russia',f:'🇷🇺'},{n:'Vladivostok',c:'Russia',f:'🇷🇺'},
+  // Cyprus / Malta / Micro
+  {n:'Nicosia',c:'Cyprus',f:'🇨🇾'},{n:'Limassol',c:'Cyprus',f:'🇨🇾'},{n:'Larnaca',c:'Cyprus',f:'🇨🇾'},{n:'Paphos',c:'Cyprus',f:'🇨🇾'},{n:'Ayia Napa',c:'Cyprus',f:'🇨🇾'},
+  {n:'Valletta',c:'Malta',f:'🇲🇹'},{n:'Sliema',c:'Malta',f:'🇲🇹'},{n:"St Julian's",c:'Malta',f:'🇲🇹'},{n:'Mdina',c:'Malta',f:'🇲🇹'},{n:'Gozo',c:'Malta',f:'🇲🇹'},
+  {n:'Luxembourg City',c:'Luxembourg',f:'🇱🇺'},
+  {n:'Monaco',c:'Monaco',f:'🇲🇨'},
+  {n:'Andorra la Vella',c:'Andorra',f:'🇦🇩'},
+  {n:'San Marino',c:'San Marino',f:'🇸🇲'},
+  {n:'Vaduz',c:'Liechtenstein',f:'🇱🇮'},
+  // Caucasus (geographically Asia but often grouped Europe)
+  {n:'Tbilisi',c:'Georgia',f:'🇬🇪'},{n:'Batumi',c:'Georgia',f:'🇬🇪'},{n:'Kutaisi',c:'Georgia',f:'🇬🇪'},
+  {n:'Yerevan',c:'Armenia',f:'🇦🇲'},{n:'Gyumri',c:'Armenia',f:'🇦🇲'},
+  {n:'Baku',c:'Azerbaijan',f:'🇦🇿'},{n:'Ganja',c:'Azerbaijan',f:'🇦🇿'},
+
+  // ===== NORTH AMERICA =====
+  // USA
+  {n:'New York City',c:'USA',f:'🇺🇸'},{n:'Los Angeles',c:'USA',f:'🇺🇸'},{n:'Chicago',c:'USA',f:'🇺🇸'},{n:'Houston',c:'USA',f:'🇺🇸'},{n:'Phoenix',c:'USA',f:'🇺🇸'},{n:'Philadelphia',c:'USA',f:'🇺🇸'},{n:'San Antonio',c:'USA',f:'🇺🇸'},{n:'San Diego',c:'USA',f:'🇺🇸'},{n:'Dallas',c:'USA',f:'🇺🇸'},{n:'San Jose',c:'USA',f:'🇺🇸'},{n:'Austin',c:'USA',f:'🇺🇸'},{n:'Jacksonville',c:'USA',f:'🇺🇸'},{n:'Fort Worth',c:'USA',f:'🇺🇸'},{n:'Columbus',c:'USA',f:'🇺🇸'},{n:'Charlotte',c:'USA',f:'🇺🇸'},{n:'San Francisco',c:'USA',f:'🇺🇸'},{n:'Indianapolis',c:'USA',f:'🇺🇸'},{n:'Seattle',c:'USA',f:'🇺🇸'},{n:'Denver',c:'USA',f:'🇺🇸'},{n:'Washington DC',c:'USA',f:'🇺🇸'},{n:'Boston',c:'USA',f:'🇺🇸'},{n:'El Paso',c:'USA',f:'🇺🇸'},{n:'Nashville',c:'USA',f:'🇺🇸'},{n:'Oklahoma City',c:'USA',f:'🇺🇸'},{n:'Las Vegas',c:'USA',f:'🇺🇸'},{n:'Portland',c:'USA',f:'🇺🇸'},{n:'Detroit',c:'USA',f:'🇺🇸'},{n:'Memphis',c:'USA',f:'🇺🇸'},{n:'Louisville',c:'USA',f:'🇺🇸'},{n:'Baltimore',c:'USA',f:'🇺🇸'},{n:'Milwaukee',c:'USA',f:'🇺🇸'},{n:'Albuquerque',c:'USA',f:'🇺🇸'},{n:'Tucson',c:'USA',f:'🇺🇸'},{n:'Fresno',c:'USA',f:'🇺🇸'},{n:'Sacramento',c:'USA',f:'🇺🇸'},{n:'Kansas City',c:'USA',f:'🇺🇸'},{n:'Mesa',c:'USA',f:'🇺🇸'},{n:'Atlanta',c:'USA',f:'🇺🇸'},{n:'Omaha',c:'USA',f:'🇺🇸'},{n:'Colorado Springs',c:'USA',f:'🇺🇸'},{n:'Raleigh',c:'USA',f:'🇺🇸'},{n:'Miami',c:'USA',f:'🇺🇸'},{n:'Virginia Beach',c:'USA',f:'🇺🇸'},{n:'Long Beach',c:'USA',f:'🇺🇸'},{n:'Oakland',c:'USA',f:'🇺🇸'},{n:'Minneapolis',c:'USA',f:'🇺🇸'},{n:'Tulsa',c:'USA',f:'🇺🇸'},{n:'Arlington',c:'USA',f:'🇺🇸'},{n:'Tampa',c:'USA',f:'🇺🇸'},{n:'New Orleans',c:'USA',f:'🇺🇸'},{n:'Honolulu',c:'USA',f:'🇺🇸'},{n:'Anaheim',c:'USA',f:'🇺🇸'},{n:'Cincinnati',c:'USA',f:'🇺🇸'},{n:'Pittsburgh',c:'USA',f:'🇺🇸'},{n:'St Louis',c:'USA',f:'🇺🇸'},{n:'Orlando',c:'USA',f:'🇺🇸'},{n:'Cleveland',c:'USA',f:'🇺🇸'},{n:'Buffalo',c:'USA',f:'🇺🇸'},{n:'Salt Lake City',c:'USA',f:'🇺🇸'},{n:'Richmond',c:'USA',f:'🇺🇸'},{n:'Boise',c:'USA',f:'🇺🇸'},{n:'Spokane',c:'USA',f:'🇺🇸'},{n:'Tacoma',c:'USA',f:'🇺🇸'},{n:'Madison',c:'USA',f:'🇺🇸'},{n:'Reno',c:'USA',f:'🇺🇸'},{n:'Charleston',c:'USA',f:'🇺🇸'},{n:'Savannah',c:'USA',f:'🇺🇸'},{n:'Asheville',c:'USA',f:'🇺🇸'},{n:'Burlington',c:'USA',f:'🇺🇸'},{n:'Portland ME',c:'USA',f:'🇺🇸'},{n:'Providence',c:'USA',f:'🇺🇸'},{n:'Hartford',c:'USA',f:'🇺🇸'},{n:'Albany',c:'USA',f:'🇺🇸'},{n:'Rochester',c:'USA',f:'🇺🇸'},{n:'Syracuse',c:'USA',f:'🇺🇸'},{n:'Boulder',c:'USA',f:'🇺🇸'},{n:'Santa Fe',c:'USA',f:'🇺🇸'},{n:'Taos',c:'USA',f:'🇺🇸'},{n:'Sedona',c:'USA',f:'🇺🇸'},{n:'Key West',c:'USA',f:'🇺🇸'},{n:'Sarasota',c:'USA',f:'🇺🇸'},{n:'Naples FL',c:'USA',f:'🇺🇸'},{n:'Hilton Head',c:'USA',f:'🇺🇸'},{n:'Lexington',c:'USA',f:'🇺🇸'},{n:'Chattanooga',c:'USA',f:'🇺🇸'},{n:'Knoxville',c:'USA',f:'🇺🇸'},{n:'Birmingham AL',c:'USA',f:'🇺🇸'},{n:'Montgomery',c:'USA',f:'🇺🇸'},{n:'Mobile',c:'USA',f:'🇺🇸'},{n:'Jackson',c:'USA',f:'🇺🇸'},{n:'Little Rock',c:'USA',f:'🇺🇸'},{n:'Des Moines',c:'USA',f:'🇺🇸'},{n:'Fargo',c:'USA',f:'🇺🇸'},{n:'Anchorage',c:'USA',f:'🇺🇸'},{n:'Juneau',c:'USA',f:'🇺🇸'},{n:'Berkeley',c:'USA',f:'🇺🇸'},{n:'Palo Alto',c:'USA',f:'🇺🇸'},{n:'Santa Monica',c:'USA',f:'🇺🇸'},{n:'Pasadena',c:'USA',f:'🇺🇸'},
+  // Canada
+  {n:'Toronto',c:'Canada',f:'🇨🇦'},{n:'Montreal',c:'Canada',f:'🇨🇦'},{n:'Vancouver',c:'Canada',f:'🇨🇦'},{n:'Calgary',c:'Canada',f:'🇨🇦'},{n:'Edmonton',c:'Canada',f:'🇨🇦'},{n:'Ottawa',c:'Canada',f:'🇨🇦'},{n:'Winnipeg',c:'Canada',f:'🇨🇦'},{n:'Quebec City',c:'Canada',f:'🇨🇦'},{n:'Halifax',c:'Canada',f:'🇨🇦'},{n:'Victoria',c:'Canada',f:'🇨🇦'},{n:'Hamilton',c:'Canada',f:'🇨🇦'},{n:'Kitchener',c:'Canada',f:'🇨🇦'},{n:'London ON',c:'Canada',f:'🇨🇦'},{n:'Mississauga',c:'Canada',f:'🇨🇦'},{n:'Brampton',c:'Canada',f:'🇨🇦'},{n:'Surrey',c:'Canada',f:'🇨🇦'},{n:'Regina',c:'Canada',f:'🇨🇦'},{n:'Saskatoon',c:'Canada',f:'🇨🇦'},{n:'Fredericton',c:'Canada',f:'🇨🇦'},{n:'Charlottetown',c:'Canada',f:"🇨🇦"},{n:"St John's",c:'Canada',f:'🇨🇦'},{n:'Whitehorse',c:'Canada',f:'🇨🇦'},{n:'Yellowknife',c:'Canada',f:'🇨🇦'},{n:'Banff',c:'Canada',f:'🇨🇦'},{n:'Jasper',c:'Canada',f:'🇨🇦'},{n:'Whistler',c:'Canada',f:'🇨🇦'},{n:'Kelowna',c:'Canada',f:'🇨🇦'},{n:'Niagara Falls',c:'Canada',f:'🇨🇦'},
+  // Mexico
+  {n:'Mexico City',c:'Mexico',f:'🇲🇽'},{n:'Guadalajara',c:'Mexico',f:'🇲🇽'},{n:'Monterrey',c:'Mexico',f:'🇲🇽'},{n:'Puebla',c:'Mexico',f:'🇲🇽'},{n:'Tijuana',c:'Mexico',f:'🇲🇽'},{n:'León',c:'Mexico',f:'🇲🇽'},{n:'Juárez',c:'Mexico',f:'🇲🇽'},{n:'Mérida',c:'Mexico',f:'🇲🇽'},{n:'Querétaro',c:'Mexico',f:'🇲🇽'},{n:'Toluca',c:'Mexico',f:'🇲🇽'},{n:'Chihuahua',c:'Mexico',f:'🇲🇽'},{n:'Hermosillo',c:'Mexico',f:'🇲🇽'},{n:'Culiacán',c:'Mexico',f:'🇲🇽'},{n:'Aguascalientes',c:'Mexico',f:'🇲🇽'},{n:'Veracruz',c:'Mexico',f:'🇲🇽'},{n:'Mazatlán',c:'Mexico',f:'🇲🇽'},{n:'Acapulco',c:'Mexico',f:'🇲🇽'},{n:'Playa del Carmen',c:'Mexico',f:'🇲🇽'},{n:'Cancún',c:'Mexico',f:'🇲🇽'},{n:'Tulum',c:'Mexico',f:'🇲🇽'},{n:'Puerto Vallarta',c:'Mexico',f:'🇲🇽'},{n:'Ensenada',c:'Mexico',f:'🇲🇽'},{n:'San Miguel de Allende',c:'Mexico',f:'🇲🇽'},{n:'Oaxaca',c:'Mexico',f:'🇲🇽'},{n:'Cuernavaca',c:'Mexico',f:'🇲🇽'},{n:'Guanajuato',c:'Mexico',f:'🇲🇽'},{n:'Morelia',c:'Mexico',f:'🇲🇽'},{n:'Pátzcuaro',c:'Mexico',f:'🇲🇽'},{n:'Lake Chapala',c:'Mexico',f:'🇲🇽'},{n:'Ajijic',c:'Mexico',f:'🇲🇽'},{n:'Cabo San Lucas',c:'Mexico',f:'🇲🇽'},{n:'La Paz',c:'Mexico',f:'🇲🇽'},
+
+  // ===== LATIN AMERICA & CARIBBEAN =====
+  {n:'Guatemala City',c:'Guatemala',f:'🇬🇹'},{n:'Antigua',c:'Guatemala',f:'🇬🇹'},{n:'Lake Atitlán',c:'Guatemala',f:'🇬🇹'},{n:'Quetzaltenango',c:'Guatemala',f:'🇬🇹'},
+  {n:'Belize City',c:'Belize',f:'🇧🇿'},{n:'Ambergris Caye',c:'Belize',f:'🇧🇿'},{n:'Caye Caulker',c:'Belize',f:'🇧🇿'},{n:'San Ignacio',c:'Belize',f:'🇧🇿'},{n:'Placencia',c:'Belize',f:'🇧🇿'},
+  {n:'San Salvador',c:'El Salvador',f:'🇸🇻'},{n:'Santa Ana',c:'El Salvador',f:'🇸🇻'},
+  {n:'Tegucigalpa',c:'Honduras',f:'🇭🇳'},{n:'San Pedro Sula',c:'Honduras',f:'🇭🇳'},{n:'Roatán',c:'Honduras',f:'🇭🇳'},
+  {n:'Managua',c:'Nicaragua',f:'🇳🇮'},{n:'Granada NIC',c:'Nicaragua',f:'🇳🇮'},{n:'León NIC',c:'Nicaragua',f:'🇳🇮'},{n:'San Juan del Sur',c:'Nicaragua',f:'🇳🇮'},
+  {n:'San José',c:'Costa Rica',f:'🇨🇷'},{n:'Jacó',c:'Costa Rica',f:'🇨🇷'},{n:'Tamarindo',c:'Costa Rica',f:'🇨🇷'},{n:'Nosara',c:'Costa Rica',f:'🇨🇷'},{n:'Dominical',c:'Costa Rica',f:'🇨🇷'},{n:'Atenas',c:'Costa Rica',f:'🇨🇷'},{n:'Puerto Viejo',c:'Costa Rica',f:'🇨🇷'},{n:'Monteverde',c:'Costa Rica',f:'🇨🇷'},
+  {n:'Panama City',c:'Panama',f:'🇵🇦'},{n:'Boquete',c:'Panama',f:'🇵🇦'},{n:'Coronado',c:'Panama',f:'🇵🇦'},{n:'Bocas del Toro',c:'Panama',f:'🇵🇦'},{n:'David',c:'Panama',f:'🇵🇦'},
+  {n:'Bogotá',c:'Colombia',f:'🇨🇴'},{n:'Medellín',c:'Colombia',f:'🇨🇴'},{n:'Cali',c:'Colombia',f:'🇨🇴'},{n:'Cartagena',c:'Colombia',f:'🇨🇴'},{n:'Barranquilla',c:'Colombia',f:'🇨🇴'},{n:'Bucaramanga',c:'Colombia',f:'🇨🇴'},{n:'Santa Marta',c:'Colombia',f:'🇨🇴'},{n:'Pereira',c:'Colombia',f:'🇨🇴'},{n:'Manizales',c:'Colombia',f:'🇨🇴'},
+  {n:'Caracas',c:'Venezuela',f:'🇻🇪'},{n:'Maracaibo',c:'Venezuela',f:'🇻🇪'},{n:'Valencia VE',c:'Venezuela',f:'🇻🇪'},
+  {n:'Quito',c:'Ecuador',f:'🇪🇨'},{n:'Guayaquil',c:'Ecuador',f:'🇪🇨'},{n:'Cuenca',c:'Ecuador',f:'🇪🇨'},{n:'Ambato',c:'Ecuador',f:'🇪🇨'},{n:'Loja',c:'Ecuador',f:'🇪🇨'},{n:'Vilcabamba',c:'Ecuador',f:'🇪🇨'},
+  {n:'Lima',c:'Peru',f:'🇵🇪'},{n:'Arequipa',c:'Peru',f:'🇵🇪'},{n:'Trujillo',c:'Peru',f:'🇵🇪'},{n:'Cusco',c:'Peru',f:'🇵🇪'},{n:'Iquitos',c:'Peru',f:'🇵🇪'},{n:'Piura',c:'Peru',f:'🇵🇪'},
+  {n:'La Paz BO',c:'Bolivia',f:'🇧🇴'},{n:'Santa Cruz',c:'Bolivia',f:'🇧🇴'},{n:'Cochabamba',c:'Bolivia',f:'🇧🇴'},{n:'Sucre',c:'Bolivia',f:'🇧🇴'},
+  {n:'Santiago',c:'Chile',f:'🇨🇱'},{n:'Valparaíso',c:'Chile',f:'🇨🇱'},{n:'Viña del Mar',c:'Chile',f:'🇨🇱'},{n:'Concepción',c:'Chile',f:'🇨🇱'},{n:'Antofagasta',c:'Chile',f:'🇨🇱'},{n:'Pucón',c:'Chile',f:'🇨🇱'},{n:'Puerto Montt',c:'Chile',f:'🇨🇱'},
+  {n:'Buenos Aires',c:'Argentina',f:'🇦🇷'},{n:'Córdoba AR',c:'Argentina',f:'🇦🇷'},{n:'Rosario',c:'Argentina',f:'🇦🇷'},{n:'Mendoza',c:'Argentina',f:'🇦🇷'},{n:'La Plata',c:'Argentina',f:'🇦🇷'},{n:'Mar del Plata',c:'Argentina',f:'🇦🇷'},{n:'Bariloche',c:'Argentina',f:'🇦🇷'},{n:'Ushuaia',c:'Argentina',f:'🇦🇷'},{n:'Salta',c:'Argentina',f:'🇦🇷'},
+  {n:'Montevideo',c:'Uruguay',f:'🇺🇾'},{n:'Punta del Este',c:'Uruguay',f:'🇺🇾'},{n:'Colonia del Sacramento',c:'Uruguay',f:'🇺🇾'},
+  {n:'Asunción',c:'Paraguay',f:'🇵🇾'},{n:'Ciudad del Este',c:'Paraguay',f:'🇵🇾'},
+  {n:'São Paulo',c:'Brazil',f:'🇧🇷'},{n:'Rio de Janeiro',c:'Brazil',f:'🇧🇷'},{n:'Brasília',c:'Brazil',f:'🇧🇷'},{n:'Salvador',c:'Brazil',f:'🇧🇷'},{n:'Fortaleza',c:'Brazil',f:'🇧🇷'},{n:'Belo Horizonte',c:'Brazil',f:'🇧🇷'},{n:'Manaus',c:'Brazil',f:'🇧🇷'},{n:'Curitiba',c:'Brazil',f:'🇧🇷'},{n:'Recife',c:'Brazil',f:'🇧🇷'},{n:'Porto Alegre',c:'Brazil',f:'🇧🇷'},{n:'Belém',c:'Brazil',f:'🇧🇷'},{n:'Goiânia',c:'Brazil',f:'🇧🇷'},{n:'São Luís',c:'Brazil',f:'🇧🇷'},{n:'Maceió',c:'Brazil',f:'🇧🇷'},{n:'Natal',c:'Brazil',f:'🇧🇷'},{n:'Florianópolis',c:'Brazil',f:'🇧🇷'},{n:'Vitória',c:'Brazil',f:'🇧🇷'},{n:'João Pessoa',c:'Brazil',f:'🇧🇷'},{n:'Campinas',c:'Brazil',f:'🇧🇷'},{n:'Niterói',c:'Brazil',f:'🇧🇷'},{n:'Búzios',c:'Brazil',f:'🇧🇷'},{n:'Paraty',c:'Brazil',f:'🇧🇷'},{n:'Ilha Bela',c:'Brazil',f:'🇧🇷'},
+  // Caribbean
+  {n:'Nassau',c:'Bahamas',f:'🇧🇸'},{n:'Freeport',c:'Bahamas',f:'🇧🇸'},
+  {n:'George Town',c:'Cayman Islands',f:'🇰🇾'},
+  {n:'Bridgetown',c:'Barbados',f:'🇧🇧'},
+  {n:'Castries',c:'Saint Lucia',f:'🇱🇨'},
+  {n:'Kingston',c:'Jamaica',f:'🇯🇲'},{n:'Montego Bay',c:'Jamaica',f:'🇯🇲'},{n:'Negril',c:'Jamaica',f:'🇯🇲'},
+  {n:'Port of Spain',c:'Trinidad',f:'🇹🇹'},
+  {n:'Oranjestad',c:'Aruba',f:'🇦🇼'},
+  {n:'Willemstad',c:'Curaçao',f:'🇨🇼'},
+  {n:'Punta Cana',c:'Dominican Republic',f:'🇩🇴'},{n:'Santo Domingo',c:'Dominican Republic',f:'🇩🇴'},{n:'Puerto Plata',c:'Dominican Republic',f:'🇩🇴'},{n:'Las Terrenas',c:'Dominican Republic',f:'🇩🇴'},
+  {n:'San Juan',c:'Puerto Rico',f:'🇵🇷'},{n:'Rincón',c:'Puerto Rico',f:'🇵🇷'},
+  {n:'Havana',c:'Cuba',f:'🇨🇺'},{n:'Varadero',c:'Cuba',f:'🇨🇺'},{n:'Trinidad CU',c:'Cuba',f:'🇨🇺'},
+  {n:'Charlotte Amalie',c:'US Virgin Islands',f:'🇻🇮'},
+  {n:'Hamilton',c:'Bermuda',f:'🇧🇲'},
+
+  // ===== ASIA =====
+  // China
+  {n:'Beijing',c:'China',f:'🇨🇳'},{n:'Shanghai',c:'China',f:'🇨🇳'},{n:'Guangzhou',c:'China',f:'🇨🇳'},{n:'Shenzhen',c:'China',f:'🇨🇳'},{n:'Chengdu',c:'China',f:'🇨🇳'},{n:'Wuhan',c:'China',f:'🇨🇳'},{n:'Tianjin',c:'China',f:'🇨🇳'},{n:'Chongqing',c:'China',f:'🇨🇳'},{n:'Nanjing',c:'China',f:'🇨🇳'},{n:'Hangzhou',c:'China',f:'🇨🇳'},{n:"Xi'an",c:'China',f:'🇨🇳'},{n:'Qingdao',c:'China',f:'🇨🇳'},{n:'Changsha',c:'China',f:'🇨🇳'},{n:'Zhengzhou',c:'China',f:'🇨🇳'},{n:'Shenyang',c:'China',f:'🇨🇳'},{n:'Dalian',c:'China',f:'🇨🇳'},{n:'Harbin',c:'China',f:'🇨🇳'},{n:'Jinan',c:'China',f:'🇨🇳'},{n:'Suzhou',c:'China',f:'🇨🇳'},{n:'Wuxi',c:'China',f:'🇨🇳'},{n:'Ningbo',c:'China',f:'🇨🇳'},{n:'Fuzhou',c:'China',f:'🇨🇳'},{n:'Xiamen',c:'China',f:'🇨🇳'},{n:'Kunming',c:'China',f:'🇨🇳'},{n:'Guiyang',c:'China',f:'🇨🇳'},{n:'Lhasa',c:'China',f:'🇨🇳'},{n:'Urumqi',c:'China',f:'🇨🇳'},{n:'Hohhot',c:'China',f:'🇨🇳'},{n:'Haikou',c:'China',f:'🇨🇳'},{n:'Sanya',c:'China',f:'🇨🇳'},{n:'Zhuhai',c:'China',f:'🇨🇳'},{n:'Dongguan',c:'China',f:'🇨🇳'},{n:'Foshan',c:'China',f:'🇨🇳'},
+  {n:'Hong Kong',c:'Hong Kong',f:'🇭🇰'},
+  {n:'Macau',c:'Macau',f:'🇲🇴'},
+  // Japan
+  {n:'Tokyo',c:'Japan',f:'🇯🇵'},{n:'Osaka',c:'Japan',f:'🇯🇵'},{n:'Kyoto',c:'Japan',f:'🇯🇵'},{n:'Yokohama',c:'Japan',f:'🇯🇵'},{n:'Nagoya',c:'Japan',f:'🇯🇵'},{n:'Sapporo',c:'Japan',f:'🇯🇵'},{n:'Fukuoka',c:'Japan',f:'🇯🇵'},{n:'Kobe',c:'Japan',f:'🇯🇵'},{n:'Hiroshima',c:'Japan',f:'🇯🇵'},{n:'Sendai',c:'Japan',f:'🇯🇵'},{n:'Kitakyushu',c:'Japan',f:'🇯🇵'},{n:'Chiba',c:'Japan',f:'🇯🇵'},{n:'Kawasaki',c:'Japan',f:'🇯🇵'},{n:'Saitama',c:'Japan',f:'🇯🇵'},{n:'Kumamoto',c:'Japan',f:'🇯🇵'},{n:'Naha',c:'Japan',f:'🇯🇵'},{n:'Kagoshima',c:'Japan',f:'🇯🇵'},{n:'Matsuyama',c:'Japan',f:'🇯🇵'},{n:'Nara',c:'Japan',f:'🇯🇵'},{n:'Nikko',c:'Japan',f:'🇯🇵'},{n:'Hakone',c:'Japan',f:'🇯🇵'},{n:'Niseko',c:'Japan',f:'🇯🇵'},{n:'Nagano',c:'Japan',f:'🇯🇵'},{n:'Takayama',c:'Japan',f:'🇯🇵'},{n:'Kanazawa',c:'Japan',f:'🇯🇵'},{n:'Himeji',c:'Japan',f:'🇯🇵'},{n:'Nagasaki',c:'Japan',f:'🇯🇵'},
+  // Korea
+  {n:'Seoul',c:'South Korea',f:'🇰🇷'},{n:'Busan',c:'South Korea',f:'🇰🇷'},{n:'Incheon',c:'South Korea',f:'🇰🇷'},{n:'Daegu',c:'South Korea',f:'🇰🇷'},{n:'Daejeon',c:'South Korea',f:'🇰🇷'},{n:'Gwangju',c:'South Korea',f:'🇰🇷'},{n:'Suwon',c:'South Korea',f:'🇰🇷'},{n:'Ulsan',c:'South Korea',f:'🇰🇷'},{n:'Changwon',c:'South Korea',f:'🇰🇷'},{n:'Jeju',c:'South Korea',f:'🇰🇷'},
+  // Taiwan
+  {n:'Taipei',c:'Taiwan',f:'🇹🇼'},{n:'Kaohsiung',c:'Taiwan',f:'🇹🇼'},{n:'Taichung',c:'Taiwan',f:'🇹🇼'},{n:'Tainan',c:'Taiwan',f:'🇹🇼'},{n:'Taoyuan',c:'Taiwan',f:'🇹🇼'},{n:'Hsinchu',c:'Taiwan',f:'🇹🇼'},{n:'Keelung',c:'Taiwan',f:'🇹🇼'},{n:'Hualien',c:'Taiwan',f:'🇹🇼'},
+  // Mongolia
+  {n:'Ulaanbaatar',c:'Mongolia',f:'🇲🇳'},
+  // SE Asia
+  {n:'Ho Chi Minh City',c:'Vietnam',f:'🇻🇳'},{n:'Hanoi',c:'Vietnam',f:'🇻🇳'},{n:'Da Nang',c:'Vietnam',f:'🇻🇳'},{n:'Haiphong',c:'Vietnam',f:'🇻🇳'},{n:'Can Tho',c:'Vietnam',f:'🇻🇳'},{n:'Nha Trang',c:'Vietnam',f:'🇻🇳'},{n:'Hoi An',c:'Vietnam',f:'🇻🇳'},{n:'Hue',c:'Vietnam',f:'🇻🇳'},{n:'Dalat',c:'Vietnam',f:'🇻🇳'},{n:'Phu Quoc',c:'Vietnam',f:'🇻🇳'},{n:'Vung Tau',c:'Vietnam',f:'🇻🇳'},{n:'Mui Ne',c:'Vietnam',f:'🇻🇳'},
+  {n:'Phnom Penh',c:'Cambodia',f:'🇰🇭'},{n:'Siem Reap',c:'Cambodia',f:'🇰🇭'},{n:'Battambang',c:'Cambodia',f:'🇰🇭'},{n:'Sihanoukville',c:'Cambodia',f:'🇰🇭'},{n:'Kampot',c:'Cambodia',f:'🇰🇭'},{n:'Kep',c:'Cambodia',f:'🇰🇭'},
+  {n:'Vientiane',c:'Laos',f:'🇱🇦'},{n:'Luang Prabang',c:'Laos',f:'🇱🇦'},{n:'Pakse',c:'Laos',f:'🇱🇦'},{n:'Vang Vieng',c:'Laos',f:'🇱🇦'},
+  {n:'Bangkok',c:'Thailand',f:'🇹🇭'},{n:'Chiang Mai',c:'Thailand',f:'🇹🇭'},{n:'Chiang Rai',c:'Thailand',f:'🇹🇭'},{n:'Pattaya',c:'Thailand',f:'🇹🇭'},{n:'Phuket',c:'Thailand',f:'🇹🇭'},{n:'Krabi',c:'Thailand',f:'🇹🇭'},{n:'Koh Samui',c:'Thailand',f:'🇹🇭'},{n:'Koh Phangan',c:'Thailand',f:'🇹🇭'},{n:'Koh Tao',c:'Thailand',f:'🇹🇭'},{n:'Koh Lanta',c:'Thailand',f:'🇹🇭'},{n:'Hua Hin',c:'Thailand',f:'🇹🇭'},{n:'Pai',c:'Thailand',f:'🇹🇭'},{n:'Udon Thani',c:'Thailand',f:'🇹🇭'},{n:'Khon Kaen',c:'Thailand',f:'🇹🇭'},{n:'Nakhon Ratchasima',c:'Thailand',f:'🇹🇭'},{n:'Ayutthaya',c:'Thailand',f:'🇹🇭'},{n:'Sukhothai',c:'Thailand',f:'🇹🇭'},
+  {n:'Yangon',c:'Myanmar',f:'🇲🇲'},{n:'Mandalay',c:'Myanmar',f:'🇲🇲'},{n:'Naypyidaw',c:'Myanmar',f:'🇲🇲'},{n:'Bagan',c:'Myanmar',f:'🇲🇲'},
+  {n:'Kuala Lumpur',c:'Malaysia',f:'🇲🇾'},{n:'Penang',c:'Malaysia',f:'🇲🇾'},{n:'Johor Bahru',c:'Malaysia',f:'🇲🇾'},{n:'Ipoh',c:'Malaysia',f:'🇲🇾'},{n:'Kota Kinabalu',c:'Malaysia',f:'🇲🇾'},{n:'Kuching',c:'Malaysia',f:'🇲🇾'},{n:'Malacca',c:'Malaysia',f:'🇲🇾'},{n:'Langkawi',c:'Malaysia',f:'🇲🇾'},{n:'Cameron Highlands',c:'Malaysia',f:'🇲🇾'},{n:'Shah Alam',c:'Malaysia',f:'🇲🇾'},{n:'Petaling Jaya',c:'Malaysia',f:'🇲🇾'},
+  {n:'Singapore',c:'Singapore',f:'🇸🇬'},
+  {n:'Jakarta',c:'Indonesia',f:'🇮🇩'},{n:'Surabaya',c:'Indonesia',f:'🇮🇩'},{n:'Bandung',c:'Indonesia',f:'🇮🇩'},{n:'Medan',c:'Indonesia',f:'🇮🇩'},{n:'Makassar',c:'Indonesia',f:'🇮🇩'},{n:'Semarang',c:'Indonesia',f:'🇮🇩'},{n:'Palembang',c:'Indonesia',f:'🇮🇩'},{n:'Yogyakarta',c:'Indonesia',f:'🇮🇩'},{n:'Denpasar',c:'Indonesia',f:'🇮🇩'},{n:'Ubud',c:'Indonesia',f:'🇮🇩'},{n:'Canggu',c:'Indonesia',f:'🇮🇩'},{n:'Seminyak',c:'Indonesia',f:'🇮🇩'},{n:'Lombok',c:'Indonesia',f:'🇮🇩'},{n:'Gili Trawangan',c:'Indonesia',f:'🇮🇩'},{n:'Bogor',c:'Indonesia',f:'🇮🇩'},{n:'Malang',c:'Indonesia',f:'🇮🇩'},{n:'Balikpapan',c:'Indonesia',f:'🇮🇩'},
+  {n:'Manila',c:'Philippines',f:'🇵🇭'},{n:'Cebu',c:'Philippines',f:'🇵🇭'},{n:'Davao',c:'Philippines',f:'🇵🇭'},{n:'Quezon City',c:'Philippines',f:'🇵🇭'},{n:'Zamboanga',c:'Philippines',f:'🇵🇭'},{n:'Taguig',c:'Philippines',f:'🇵🇭'},{n:'Cagayan de Oro',c:'Philippines',f:'🇵🇭'},{n:'Baguio',c:'Philippines',f:'🇵🇭'},{n:'Dumaguete',c:'Philippines',f:'🇵🇭'},{n:'Boracay',c:'Philippines',f:'🇵🇭'},{n:'Puerto Princesa',c:'Philippines',f:'🇵🇭'},{n:'El Nido',c:'Philippines',f:'🇵🇭'},{n:'Siargao',c:'Philippines',f:'🇵🇭'},{n:'Bohol',c:'Philippines',f:'🇵🇭'},{n:'Iloilo',c:'Philippines',f:'🇵🇭'},{n:'Bacolod',c:'Philippines',f:'🇵🇭'},
+  {n:'Bandar Seri Begawan',c:'Brunei',f:'🇧🇳'},
+  {n:'Dili',c:'East Timor',f:'🇹🇱'},
+  // South Asia
+  {n:'Dhaka',c:'Bangladesh',f:'🇧🇩'},{n:'Chittagong',c:'Bangladesh',f:'🇧🇩'},{n:'Khulna',c:'Bangladesh',f:'🇧🇩'},{n:'Rajshahi',c:'Bangladesh',f:'🇧🇩'},{n:'Sylhet',c:'Bangladesh',f:'🇧🇩'},
+  {n:'New Delhi',c:'India',f:'🇮🇳'},{n:'Mumbai',c:'India',f:'🇮🇳'},{n:'Bangalore',c:'India',f:'🇮🇳'},{n:'Kolkata',c:'India',f:'🇮🇳'},{n:'Chennai',c:'India',f:'🇮🇳'},{n:'Hyderabad',c:'India',f:'🇮🇳'},{n:'Pune',c:'India',f:'🇮🇳'},{n:'Ahmedabad',c:'India',f:'🇮🇳'},{n:'Jaipur',c:'India',f:'🇮🇳'},{n:'Surat',c:'India',f:'🇮🇳'},{n:'Kanpur',c:'India',f:'🇮🇳'},{n:'Lucknow',c:'India',f:'🇮🇳'},{n:'Nagpur',c:'India',f:'🇮🇳'},{n:'Indore',c:'India',f:'🇮🇳'},{n:'Thane',c:'India',f:'🇮🇳'},{n:'Bhopal',c:'India',f:'🇮🇳'},{n:'Patna',c:'India',f:'🇮🇳'},{n:'Vadodara',c:'India',f:'🇮🇳'},{n:'Agra',c:'India',f:'🇮🇳'},{n:'Ludhiana',c:'India',f:'🇮🇳'},{n:'Nashik',c:'India',f:'🇮🇳'},{n:'Varanasi',c:'India',f:'🇮🇳'},{n:'Amritsar',c:'India',f:'🇮🇳'},{n:'Chandigarh',c:'India',f:'🇮🇳'},{n:'Mysore',c:'India',f:'🇮🇳'},{n:'Coimbatore',c:'India',f:'🇮🇳'},{n:'Visakhapatnam',c:'India',f:'🇮🇳'},{n:'Kochi',c:'India',f:'🇮🇳'},{n:'Thiruvananthapuram',c:'India',f:'🇮🇳'},{n:'Goa',c:'India',f:'🇮🇳'},{n:'Rishikesh',c:'India',f:'🇮🇳'},{n:'Dharamshala',c:'India',f:'🇮🇳'},{n:'Pondicherry',c:'India',f:'🇮🇳'},{n:'Ooty',c:'India',f:'🇮🇳'},{n:'Shimla',c:'India',f:'🇮🇳'},{n:'Darjeeling',c:'India',f:'🇮🇳'},{n:'Udaipur',c:'India',f:'🇮🇳'},{n:'Jodhpur',c:'India',f:'🇮🇳'},{n:'Jaisalmer',c:'India',f:'🇮🇳'},{n:'Pushkar',c:'India',f:'🇮🇳'},
+  {n:'Kathmandu',c:'Nepal',f:'🇳🇵'},{n:'Pokhara',c:'Nepal',f:'🇳🇵'},{n:'Lalitpur',c:'Nepal',f:'🇳🇵'},{n:'Chitwan',c:'Nepal',f:'🇳🇵'},
+  {n:'Thimphu',c:'Bhutan',f:'🇧🇹'},{n:'Paro',c:'Bhutan',f:'🇧🇹'},{n:'Punakha',c:'Bhutan',f:'🇧🇹'},
+  {n:'Karachi',c:'Pakistan',f:'🇵🇰'},{n:'Lahore',c:'Pakistan',f:'🇵🇰'},{n:'Faisalabad',c:'Pakistan',f:'🇵🇰'},{n:'Rawalpindi',c:'Pakistan',f:'🇵🇰'},{n:'Multan',c:'Pakistan',f:'🇵🇰'},{n:'Peshawar',c:'Pakistan',f:'🇵🇰'},{n:'Quetta',c:'Pakistan',f:'🇵🇰'},{n:'Islamabad',c:'Pakistan',f:'🇵🇰'},
+  {n:'Kabul',c:'Afghanistan',f:'🇦🇫'},{n:'Herat',c:'Afghanistan',f:'🇦🇫'},{n:'Kandahar',c:'Afghanistan',f:'🇦🇫'},
+  {n:'Colombo',c:'Sri Lanka',f:'🇱🇰'},{n:'Kandy',c:'Sri Lanka',f:'🇱🇰'},{n:'Galle',c:'Sri Lanka',f:'🇱🇰'},{n:'Negombo',c:'Sri Lanka',f:'🇱🇰'},{n:'Trincomalee',c:'Sri Lanka',f:'🇱🇰'},{n:'Jaffna',c:'Sri Lanka',f:'🇱🇰'},{n:'Mirissa',c:'Sri Lanka',f:'🇱🇰'},{n:'Ella',c:'Sri Lanka',f:'🇱🇰'},
+  {n:'Malé',c:'Maldives',f:'🇲🇻'},
+  // Central Asia
+  {n:'Almaty',c:'Kazakhstan',f:'🇰🇿'},{n:'Astana',c:'Kazakhstan',f:'🇰🇿'},{n:'Shymkent',c:'Kazakhstan',f:'🇰🇿'},
+  {n:'Tashkent',c:'Uzbekistan',f:'🇺🇿'},{n:'Samarkand',c:'Uzbekistan',f:'🇺🇿'},{n:'Bukhara',c:'Uzbekistan',f:'🇺🇿'},{n:'Khiva',c:'Uzbekistan',f:'🇺🇿'},
+  {n:'Bishkek',c:'Kyrgyzstan',f:'🇰🇬'},{n:'Osh',c:'Kyrgyzstan',f:'🇰🇬'},
+  {n:'Dushanbe',c:'Tajikistan',f:'🇹🇯'},
+  {n:'Ashgabat',c:'Turkmenistan',f:'🇹🇲'},
+
+  // ===== MIDDLE EAST / NORTH AFRICA =====
+  {n:'Istanbul',c:'Turkey',f:'🇹🇷'},{n:'Ankara',c:'Turkey',f:'🇹🇷'},{n:'Izmir',c:'Turkey',f:'🇹🇷'},{n:'Bursa',c:'Turkey',f:'🇹🇷'},{n:'Adana',c:'Turkey',f:'🇹🇷'},{n:'Gaziantep',c:'Turkey',f:'🇹🇷'},{n:'Konya',c:'Turkey',f:'🇹🇷'},{n:'Antalya',c:'Turkey',f:'🇹🇷'},{n:'Mersin',c:'Turkey',f:'🇹🇷'},{n:'Diyarbakır',c:'Turkey',f:'🇹🇷'},{n:'Kayseri',c:'Turkey',f:'🇹🇷'},{n:'Trabzon',c:'Turkey',f:'🇹🇷'},{n:'Bodrum',c:'Turkey',f:'🇹🇷'},{n:'Fethiye',c:'Turkey',f:'🇹🇷'},{n:'Alanya',c:'Turkey',f:'🇹🇷'},{n:'Göreme',c:'Turkey',f:'🇹🇷'},{n:'Pamukkale',c:'Turkey',f:'🇹🇷'},{n:'Kuşadası',c:'Turkey',f:'🇹🇷'},
+  {n:'Tel Aviv',c:'Israel',f:'🇮🇱'},{n:'Jerusalem',c:'Israel',f:'🇮🇱'},{n:'Haifa',c:'Israel',f:'🇮🇱'},{n:'Netanya',c:'Israel',f:'🇮🇱'},{n:'Eilat',c:'Israel',f:'🇮🇱'},{n:'Herzliya',c:'Israel',f:'🇮🇱'},{n:'Nazareth',c:'Israel',f:'🇮🇱'},{n:'Tiberias',c:'Israel',f:'🇮🇱'},
+  {n:'Ramallah',c:'Palestine',f:'🇵🇸'},{n:'Bethlehem',c:'Palestine',f:'🇵🇸'},{n:'Nablus',c:'Palestine',f:'🇵🇸'},{n:'Hebron',c:'Palestine',f:'🇵🇸'},
+  {n:'Amman',c:'Jordan',f:'🇯🇴'},{n:'Petra',c:'Jordan',f:'🇯🇴'},{n:'Aqaba',c:'Jordan',f:'🇯🇴'},{n:'Jerash',c:'Jordan',f:'🇯🇴'},
+  {n:'Beirut',c:'Lebanon',f:'🇱🇧'},{n:'Tripoli LB',c:'Lebanon',f:'🇱🇧'},{n:'Sidon',c:'Lebanon',f:'🇱🇧'},{n:'Byblos',c:'Lebanon',f:'🇱🇧'},
+  {n:'Damascus',c:'Syria',f:'🇸🇾'},{n:'Aleppo',c:'Syria',f:'🇸🇾'},{n:'Latakia',c:'Syria',f:'🇸🇾'},
+  {n:'Baghdad',c:'Iraq',f:'🇮🇶'},{n:'Erbil',c:'Iraq',f:'🇮🇶'},{n:'Basra',c:'Iraq',f:'🇮🇶'},{n:'Mosul',c:'Iraq',f:'🇮🇶'},
+  {n:'Tehran',c:'Iran',f:'🇮🇷'},{n:'Mashhad',c:'Iran',f:'🇮🇷'},{n:'Isfahan',c:'Iran',f:'🇮🇷'},{n:'Shiraz',c:'Iran',f:'🇮🇷'},{n:'Tabriz',c:'Iran',f:'🇮🇷'},{n:'Yazd',c:'Iran',f:'🇮🇷'},{n:'Kish',c:'Iran',f:'🇮🇷'},
+  {n:'Riyadh',c:'Saudi Arabia',f:'🇸🇦'},{n:'Jeddah',c:'Saudi Arabia',f:'🇸🇦'},{n:'Mecca',c:'Saudi Arabia',f:'🇸🇦'},{n:'Medina',c:'Saudi Arabia',f:'🇸🇦'},{n:'Dammam',c:'Saudi Arabia',f:'🇸🇦'},{n:'Khobar',c:'Saudi Arabia',f:'🇸🇦'},{n:'Taif',c:'Saudi Arabia',f:'🇸🇦'},{n:'AlUla',c:'Saudi Arabia',f:'🇸🇦'},
+  {n:'Dubai',c:'UAE',f:'🇦🇪'},{n:'Abu Dhabi',c:'UAE',f:'🇦🇪'},{n:'Sharjah',c:'UAE',f:'🇦🇪'},{n:'Ajman',c:'UAE',f:'🇦🇪'},{n:'Ras Al Khaimah',c:'UAE',f:'🇦🇪'},{n:'Fujairah',c:'UAE',f:'🇦🇪'},
+  {n:'Doha',c:'Qatar',f:'🇶🇦'},
+  {n:'Manama',c:'Bahrain',f:'🇧🇭'},
+  {n:'Kuwait City',c:'Kuwait',f:'🇰🇼'},
+  {n:'Muscat',c:'Oman',f:'🇴🇲'},{n:'Salalah',c:'Oman',f:'🇴🇲'},{n:'Nizwa',c:'Oman',f:'🇴🇲'},
+  {n:"Sana'a",c:'Yemen',f:'🇾🇪'},{n:'Aden',c:'Yemen',f:'🇾🇪'},
+  {n:'Cairo',c:'Egypt',f:'🇪🇬'},{n:'Alexandria',c:'Egypt',f:'🇪🇬'},{n:'Giza',c:'Egypt',f:'🇪🇬'},{n:'Luxor',c:'Egypt',f:'🇪🇬'},{n:'Aswan',c:'Egypt',f:'🇪🇬'},{n:'Sharm El Sheikh',c:'Egypt',f:'🇪🇬'},{n:'Hurghada',c:'Egypt',f:'🇪🇬'},{n:'Dahab',c:'Egypt',f:'🇪🇬'},
+
+  // ===== AFRICA =====
+  {n:'Marrakech',c:'Morocco',f:'🇲🇦'},{n:'Casablanca',c:'Morocco',f:'🇲🇦'},{n:'Rabat',c:'Morocco',f:'🇲🇦'},{n:'Fes',c:'Morocco',f:'🇲🇦'},{n:'Tangier',c:'Morocco',f:'🇲🇦'},{n:'Chefchaouen',c:'Morocco',f:'🇲🇦'},{n:'Agadir',c:'Morocco',f:'🇲🇦'},{n:'Essaouira',c:'Morocco',f:'🇲🇦'},{n:'Meknes',c:'Morocco',f:'🇲🇦'},
+  {n:'Algiers',c:'Algeria',f:'🇩🇿'},{n:'Oran',c:'Algeria',f:'🇩🇿'},{n:'Constantine',c:'Algeria',f:'🇩🇿'},
+  {n:'Tunis',c:'Tunisia',f:'🇹🇳'},{n:'Sfax',c:'Tunisia',f:'🇹🇳'},{n:'Hammamet',c:'Tunisia',f:'🇹🇳'},{n:'Sousse',c:'Tunisia',f:'🇹🇳'},
+  {n:'Tripoli LY',c:'Libya',f:'🇱🇾'},{n:'Benghazi',c:'Libya',f:'🇱🇾'},
+  {n:'Khartoum',c:'Sudan',f:'🇸🇩'},{n:'Omdurman',c:'Sudan',f:'🇸🇩'},
+  {n:'Juba',c:'South Sudan',f:'🇸🇸'},
+  {n:'Dakar',c:'Senegal',f:'🇸🇳'},{n:'Saint-Louis',c:'Senegal',f:'🇸🇳'},
+  {n:'Banjul',c:'Gambia',f:'🇬🇲'},
+  {n:'Accra',c:'Ghana',f:'🇬🇭'},{n:'Kumasi',c:'Ghana',f:'🇬🇭'},{n:'Takoradi',c:'Ghana',f:'🇬🇭'},
+  {n:'Abidjan',c:'Ivory Coast',f:'🇨🇮'},{n:'Yamoussoukro',c:'Ivory Coast',f:'🇨🇮'},
+  {n:'Lagos',c:'Nigeria',f:'🇳🇬'},{n:'Abuja',c:'Nigeria',f:'🇳🇬'},{n:'Kano',c:'Nigeria',f:'🇳🇬'},{n:'Ibadan',c:'Nigeria',f:'🇳🇬'},{n:'Port Harcourt',c:'Nigeria',f:'🇳🇬'},{n:'Benin City',c:'Nigeria',f:'🇳🇬'},
+  {n:'Yaoundé',c:'Cameroon',f:'🇨🇲'},{n:'Douala',c:'Cameroon',f:'🇨🇲'},
+  {n:'Addis Ababa',c:'Ethiopia',f:'🇪🇹'},{n:'Dire Dawa',c:'Ethiopia',f:'🇪🇹'},{n:'Lalibela',c:'Ethiopia',f:'🇪🇹'},{n:'Gondar',c:'Ethiopia',f:'🇪🇹'},
+  {n:'Asmara',c:'Eritrea',f:'🇪🇷'},
+  {n:'Nairobi',c:'Kenya',f:'🇰🇪'},{n:'Mombasa',c:'Kenya',f:'🇰🇪'},{n:'Kisumu',c:'Kenya',f:'🇰🇪'},{n:'Diani Beach',c:'Kenya',f:'🇰🇪'},{n:'Watamu',c:'Kenya',f:'🇰🇪'},
+  {n:'Kampala',c:'Uganda',f:'🇺🇬'},{n:'Entebbe',c:'Uganda',f:'🇺🇬'},{n:'Jinja',c:'Uganda',f:'🇺🇬'},
+  {n:'Kigali',c:'Rwanda',f:'🇷🇼'},{n:'Gisenyi',c:'Rwanda',f:'🇷🇼'},
+  {n:'Bujumbura',c:'Burundi',f:'🇧🇮'},
+  {n:'Dar es Salaam',c:'Tanzania',f:'🇹🇿'},{n:'Dodoma',c:'Tanzania',f:'🇹🇿'},{n:'Arusha',c:'Tanzania',f:'🇹🇿'},{n:'Zanzibar City',c:'Tanzania',f:'🇹🇿'},{n:'Mwanza',c:'Tanzania',f:'🇹🇿'},
+  {n:'Maputo',c:'Mozambique',f:'🇲🇿'},{n:'Beira',c:'Mozambique',f:'🇲🇿'},{n:'Pemba',c:'Mozambique',f:'🇲🇿'},
+  {n:'Johannesburg',c:'South Africa',f:'🇿🇦'},{n:'Cape Town',c:'South Africa',f:'🇿🇦'},{n:'Durban',c:'South Africa',f:'🇿🇦'},{n:'Pretoria',c:'South Africa',f:'🇿🇦'},{n:'Port Elizabeth',c:'South Africa',f:'🇿🇦'},{n:'Bloemfontein',c:'South Africa',f:'🇿🇦'},{n:'Stellenbosch',c:'South Africa',f:'🇿🇦'},{n:'Franschhoek',c:'South Africa',f:'🇿🇦'},{n:'Knysna',c:'South Africa',f:'🇿🇦'},{n:'East London',c:'South Africa',f:'🇿🇦'},{n:'Nelspruit',c:'South Africa',f:'🇿🇦'},
+  {n:'Windhoek',c:'Namibia',f:'🇳🇦'},{n:'Swakopmund',c:'Namibia',f:'🇳🇦'},{n:'Walvis Bay',c:'Namibia',f:'🇳🇦'},
+  {n:'Gaborone',c:'Botswana',f:'🇧🇼'},{n:'Francistown',c:'Botswana',f:'🇧🇼'},{n:'Maun',c:'Botswana',f:'🇧🇼'},
+  {n:'Harare',c:'Zimbabwe',f:'🇿🇼'},{n:'Bulawayo',c:'Zimbabwe',f:'🇿🇼'},{n:'Victoria Falls',c:'Zimbabwe',f:'🇿🇼'},
+  {n:'Lusaka',c:'Zambia',f:'🇿🇲'},{n:'Livingstone',c:'Zambia',f:'🇿🇲'},
+  {n:'Lilongwe',c:'Malawi',f:'🇲🇼'},{n:'Blantyre',c:'Malawi',f:'🇲🇼'},
+  {n:'Antananarivo',c:'Madagascar',f:'🇲🇬'},{n:'Tulear',c:'Madagascar',f:'🇲🇬'},
+  {n:'Port Louis',c:'Mauritius',f:'🇲🇺'},{n:'Grand Baie',c:'Mauritius',f:'🇲🇺'},
+  {n:'Victoria',c:'Seychelles',f:'🇸🇨'},
+  {n:'Luanda',c:'Angola',f:'🇦🇴'},
+  {n:'Kinshasa',c:'DR Congo',f:'🇨🇩'},{n:'Lubumbashi',c:'DR Congo',f:'🇨🇩'},
+
+  // ===== OCEANIA =====
+  {n:'Sydney',c:'Australia',f:'🇦🇺'},{n:'Melbourne',c:'Australia',f:'🇦🇺'},{n:'Brisbane',c:'Australia',f:'🇦🇺'},{n:'Perth',c:'Australia',f:'🇦🇺'},{n:'Adelaide',c:'Australia',f:'🇦🇺'},{n:'Gold Coast',c:'Australia',f:'🇦🇺'},{n:'Newcastle AU',c:'Australia',f:'🇦🇺'},{n:'Canberra',c:'Australia',f:'🇦🇺'},{n:'Hobart',c:'Australia',f:'🇦🇺'},{n:'Darwin',c:'Australia',f:'🇦🇺'},{n:'Cairns',c:'Australia',f:'🇦🇺'},{n:'Townsville',c:'Australia',f:'🇦🇺'},{n:'Byron Bay',c:'Australia',f:'🇦🇺'},{n:'Noosa',c:'Australia',f:'🇦🇺'},{n:'Sunshine Coast',c:'Australia',f:'🇦🇺'},{n:'Mackay',c:'Australia',f:'🇦🇺'},{n:'Wollongong',c:'Australia',f:'🇦🇺'},{n:'Geelong',c:'Australia',f:'🇦🇺'},{n:'Ballarat',c:'Australia',f:'🇦🇺'},{n:'Launceston',c:'Australia',f:'🇦🇺'},{n:'Fremantle',c:'Australia',f:'🇦🇺'},{n:'Alice Springs',c:'Australia',f:'🇦🇺'},{n:'Broome',c:'Australia',f:'🇦🇺'},{n:'Port Douglas',c:'Australia',f:'🇦🇺'},{n:'Margaret River',c:'Australia',f:'🇦🇺'},
+  {n:'Auckland',c:'New Zealand',f:'🇳🇿'},{n:'Wellington',c:'New Zealand',f:'🇳🇿'},{n:'Christchurch',c:'New Zealand',f:'🇳🇿'},{n:'Hamilton NZ',c:'New Zealand',f:'🇳🇿'},{n:'Tauranga',c:'New Zealand',f:'🇳🇿'},{n:'Dunedin',c:'New Zealand',f:'🇳🇿'},{n:'Palmerston North',c:'New Zealand',f:'🇳🇿'},{n:'Napier',c:'New Zealand',f:'🇳🇿'},{n:'Queenstown',c:'New Zealand',f:'🇳🇿'},{n:'Nelson',c:'New Zealand',f:'🇳🇿'},{n:'Rotorua',c:'New Zealand',f:'🇳🇿'},{n:'Taupo',c:'New Zealand',f:'🇳🇿'},{n:'Wanaka',c:'New Zealand',f:'🇳🇿'},
+  {n:'Suva',c:'Fiji',f:'🇫🇯'},{n:'Nadi',c:'Fiji',f:'🇫🇯'},{n:'Lautoka',c:'Fiji',f:'🇫🇯'},
+  {n:'Port Moresby',c:'Papua New Guinea',f:'🇵🇬'},{n:'Lae',c:'Papua New Guinea',f:'🇵🇬'},
+  {n:'Apia',c:'Samoa',f:'🇼🇸'},
+  {n:"Nuku'alofa",c:'Tonga',f:'🇹🇴'},
+  {n:'Port Vila',c:'Vanuatu',f:'🇻🇺'},
+  {n:'Honiara',c:'Solomon Islands',f:'🇸🇧'},
+  {n:'Nouméa',c:'New Caledonia',f:'🇳🇨'},
+  {n:'Papeete',c:'French Polynesia',f:'🇵🇫'},{n:'Bora Bora',c:'French Polynesia',f:'🇵🇫'},
+  {n:'Rarotonga',c:'Cook Islands',f:'🇨🇰'},
 ];
 const WORLD_CITY_LOOKUP = Object.fromEntries(WORLD_CITIES.map(c => [c.n.toLowerCase(), c]));
 
