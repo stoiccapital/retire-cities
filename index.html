@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Retire Cities — Where should you retire?</title>
+<meta name="description" content="Opinionated retirement rankings — healthcare, pension tax, visa path, safety, climate. 45 cities compared for a comfortable later life." />
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #121212;
+    --surface-2: #1a1a1a;
+    --border: #222;
+    --border-2: #333;
+    --text: #f5f5f5;
+    --muted: #888;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --blue: #60a5fa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 32px 20px 64px; }
+  .title { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  h1 { font-size: 42px; margin: 0 0 10px; font-weight: 700; letter-spacing: -0.02em; }
+  .subtitle { font-size: 15px; color: var(--muted); max-width: 640px; margin-bottom: 24px; }
+  header { margin-bottom: 24px; }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .filter-group {
+    display: inline-flex;
+    gap: 1px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    overflow: hidden;
+  }
+  .filter-group button {
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 12px;
+    padding: 7px 12px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+  .filter-group button:hover { color: var(--text); }
+  .filter-group button.on { background: var(--surface-2); color: var(--text); }
+  .filter-label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+  .search {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 13px;
+    min-width: 180px;
+    flex: 1;
+    max-width: 300px;
+  }
+  .search:focus { outline: none; border-color: var(--border-2); }
+
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead { background: var(--surface-2); position: sticky; top: 0; }
+  thead th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 12px 14px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  thead th:hover { color: var(--text); }
+  thead th.sorted { color: var(--text); }
+  thead th .arrow { opacity: 0.4; margin-left: 2px; font-size: 9px; }
+  thead th.sorted .arrow { opacity: 1; color: var(--amber); }
+  thead th.num { text-align: right; }
+  thead th.city { min-width: 180px; }
+  thead th.rank { width: 32px; text-align: right; color: var(--muted); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 12px 14px; vertical-align: middle; }
+  tbody td.rank { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+  tbody td.city { font-weight: 500; }
+  tbody td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+  .city-cell { display: flex; align-items: center; gap: 10px; }
+  .flag { font-size: 20px; line-height: 1; }
+  .city-name { color: var(--text); }
+  .country { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .score {
+    display: inline-block;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .score.high { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+  .score.mid  { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+  .score.low  { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .visa-easy  { background: rgba(34, 197, 94, 0.15); color: var(--green); }
+  .visa-medium { background: rgba(245, 158, 11, 0.15); color: var(--amber); }
+  .visa-hard  { background: rgba(239, 68, 68, 0.15); color: var(--red); }
+
+  footer {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 32px;
+    text-align: center;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+  footer a:hover { color: var(--text); }
+
+  /* Mobile */
+  @media (max-width: 820px) {
+    h1 { font-size: 28px; }
+    .wrap { padding: 20px 14px 48px; }
+    thead { display: none; }
+    tbody tr {
+      display: block;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody td { display: block; padding: 2px 14px; text-align: left; }
+    tbody td.rank {
+      display: inline-block;
+      font-size: 11px;
+      padding: 0 14px 6px;
+    }
+    tbody td.city { padding: 4px 14px 10px; }
+    tbody td.num {
+      display: inline-block;
+      font-size: 12px;
+      padding: 2px 14px;
+      min-width: 50%;
+    }
+    tbody td.num::before {
+      content: attr(data-label) " · ";
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+  }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    z-index: 100;
+    overflow-y: auto;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.on { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-width: 640px;
+    width: 100%;
+    padding: 28px;
+    position: relative;
+  }
+  .modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  .modal-head h2 { margin: 0; font-size: 24px; }
+  .modal-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .modal-close {
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .modal-stat {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .modal-stat .k { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .modal-stat .v { font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .modal-note {
+    background: var(--surface-2);
+    border-left: 2px solid var(--amber);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--text);
+    border-radius: 0 6px 6px 0;
+  }
+  .modal-note strong { color: var(--amber); }
+
+  /* Formula explainer */
+  .explainer {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-top: 32px;
+    font-size: 13px;
+  }
+  .explainer h3 { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  .explainer-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .explainer-row:last-child { border-bottom: none; }
+  .explainer-row .w { color: var(--amber); font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title">Retire Cities</div>
+    <h1>Where should you retire?</h1>
+    <div class="subtitle">
+      45 cities ranked for a comfortable retirement — healthcare, pension-friendly tax, retirement-visa paths, safety, climate.
+      Opinionated. No ads. Updated as the world changes.
+    </div>
+  </header>
+
+  <div class="filters">
+    <input type="text" class="search" id="search" placeholder="Search city or country…" />
+
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span class="filter-label">Visa</span>
+      <div class="filter-group" id="filter-visa">
+        <button data-v="all" class="on">All</button>
+        <button data-v="easy">Easy</button>
+        <button data-v="medium">Medium</button>
+        <button data-v="hard">Hard</button>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span class="filter-label">Max $/mo</span>
+      <div class="filter-group" id="filter-cost">
+        <button data-c="999999" class="on">All</button>
+        <button data-c="1500">$1500</button>
+        <button data-c="2000">$2000</button>
+        <button data-c="3000">$3000</button>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span class="filter-label">Min healthcare</span>
+      <div class="filter-group" id="filter-health">
+        <button data-h="0" class="on">All</button>
+        <button data-h="7">7+</button>
+        <button data-h="8">8+</button>
+        <button data-h="9">9+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table id="cities-table">
+      <thead>
+        <tr>
+          <th class="rank">#</th>
+          <th class="city" data-k="name">City<span class="arrow">↕</span></th>
+          <th class="num" data-k="score">Score<span class="arrow">↕</span></th>
+          <th class="num" data-k="monthly">$ / month<span class="arrow">↕</span></th>
+          <th class="num" data-k="healthcare">Healthcare<span class="arrow">↕</span></th>
+          <th class="num" data-k="pensionTaxPct">Pens tax %<span class="arrow">↕</span></th>
+          <th class="num" data-k="visaScore">Visa<span class="arrow">↕</span></th>
+          <th class="num" data-k="safety">Safety<span class="arrow">↕</span></th>
+          <th class="num" data-k="climate">Climate<span class="arrow">↕</span></th>
+          <th class="num" data-k="english">English<span class="arrow">↕</span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="explainer">
+    <h3>Retire Score — how it's weighted</h3>
+    <div class="explainer-row"><span>Healthcare quality + accessibility to foreigners</span><span class="w">15 %</span></div>
+    <div class="explainer-row"><span>Visa path for retirees</span><span class="w">15 %</span></div>
+    <div class="explainer-row"><span>Cost of living (couple, retired)</span><span class="w">15 %</span></div>
+    <div class="explainer-row"><span>Safety</span><span class="w">10 %</span></div>
+    <div class="explainer-row"><span>Climate — year-round comfort</span><span class="w">10 %</span></div>
+    <div class="explainer-row"><span>English penetration</span><span class="w">8 %</span></div>
+    <div class="explainer-row"><span>Tax on foreign pension income</span><span class="w">8 %</span></div>
+    <div class="explainer-row"><span>Expat community</span><span class="w">6 %</span></div>
+    <div class="explainer-row"><span>Air quality</span><span class="w">6 %</span></div>
+    <div class="explainer-row"><span>Walkability</span><span class="w">4 %</span></div>
+    <div class="explainer-row"><span>Flight hub — visits home + grandkids</span><span class="w">3 %</span></div>
+  </div>
+
+  <footer>
+    45 cities · opinions baked in · data audited Oct 2026 · <a href="https://github.com/stoiccapital" target="_blank">more at stoiccapital</a>
+  </footer>
+</div>
+
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+// Data compiled Oct 2026 — retirement-focused city snapshot.
+// monthly         = USD/month retired-couple budget (rent + food + healthcare + basics)
+// internet        = median Mbps
+// healthcare      = 1-10 blended quality + accessibility to foreigners
+// pensionTaxPct   = effective tax on foreign pension income for a resident retiree
+// visa            = 'easy' | 'medium' | 'hard' for retirement-eligible visas
+// safety/climate/english/expat/air/walk/hub = 1-10 scores
+const CITIES = [
+  // Portugal — D7 passive-income visa is the global standard for retirees
+  { id:'lisbon', name:'Lisbon', country:'Portugal', flag:'🇵🇹', monthly:2000, internet:100, healthcare:9, pensionTaxPct:10, taxNote:'NHR 10% flat on foreign pensions for 10 years (new residents)', visa:'easy', visaNote:'D7 passive-income visa — the global standard retirement visa', safety:9, climate:9, english:8, expat:10, air:7, walk:8, hub:8, note:'The global default pick. Great weather, EU healthcare, massive expat community, well-worn retirement path.' },
+  { id:'algarve', name:'Algarve', country:'Portugal', flag:'🇵🇹', monthly:1800, internet:100, healthcare:8, pensionTaxPct:10, taxNote:'NHR 10% flat for 10 years', visa:'easy', visaNote:'D7 visa — identical to mainland', safety:10, climate:10, english:9, expat:10, air:9, walk:7, hub:6, note:'Golf + sun + English spoken everywhere. The most retiree-focused region in Europe.' },
+  { id:'porto', name:'Porto', country:'Portugal', flag:'🇵🇹', monthly:1700, internet:100, healthcare:8, pensionTaxPct:10, taxNote:'NHR 10% flat', visa:'easy', visaNote:'D7 visa', safety:9, climate:8, english:7, expat:7, air:7, walk:9, hub:7, note:'Walkable medieval centre, river views, port wine. 15% cheaper than Lisbon.' },
+  { id:'madeira', name:'Madeira', country:'Portugal', flag:'🇵🇹', monthly:1800, internet:100, healthcare:8, pensionTaxPct:10, taxNote:'NHR 10% flat · Madeira has additional incentive regimes', visa:'easy', visaNote:'D7 visa', safety:10, climate:10, english:7, expat:7, air:10, walk:7, hub:5, note:'Spring-like year-round. Mountains and ocean. Flight connectivity the main downside.' },
+
+  // Spain — non-lucrative visa is the retiree workhorse
+  { id:'valencia', name:'Valencia', country:'Spain', flag:'🇪🇸', monthly:2000, internet:200, healthcare:9, pensionTaxPct:24, taxNote:'19-47% progressive · Beckham Law 24% flat (if eligible)', visa:'easy', visaNote:'Non-lucrative residence — proof of ~$32k/yr passive income', safety:9, climate:9, english:6, expat:8, air:8, walk:9, hub:7, note:'Beach + paella + metro + Mediterranean climate. Cheaper than Barcelona, better healthcare than most.' },
+  { id:'malaga', name:'Málaga', country:'Spain', flag:'🇪🇸', monthly:2000, internet:200, healthcare:9, pensionTaxPct:24, taxNote:'19-47% progressive', visa:'easy', visaNote:'Non-lucrative residence', safety:8, climate:10, english:7, expat:9, air:8, walk:8, hub:8, note:'Gateway to Costa del Sol. Huge British + Nordic retiree community. 320 sunny days.' },
+  { id:'alicante', name:'Alicante', country:'Spain', flag:'🇪🇸', monthly:1800, internet:200, healthcare:9, pensionTaxPct:24, taxNote:'19-47% progressive', visa:'easy', visaNote:'Non-lucrative residence', safety:9, climate:10, english:8, expat:10, air:8, walk:8, hub:6, note:'Among the highest expat concentrations in Europe. Mild winters, affordable, flat terrain.' },
+  { id:'palma', name:'Palma de Mallorca', country:'Spain', flag:'🇪🇸', monthly:2200, internet:200, healthcare:9, pensionTaxPct:24, taxNote:'19-47% progressive', visa:'easy', visaNote:'Non-lucrative residence', safety:9, climate:9, english:7, expat:8, air:9, walk:9, hub:7, note:'Island living with EU healthcare. German + British retiree hub.' },
+  { id:'barcelona-r', name:'Barcelona', country:'Spain', flag:'🇪🇸', monthly:2600, internet:200, healthcare:9, pensionTaxPct:24, taxNote:'19-47% progressive', visa:'easy', visaNote:'Non-lucrative residence', safety:7, climate:9, english:7, expat:9, air:7, walk:10, hub:10, note:'Walkable, cultural, flights everywhere. Watch pickpockets. Expensive by Spanish standards.' },
+
+  // Italy — 7% flat rate for retirees moving to south Italy
+  { id:'lecce', name:'Lecce', country:'Italy', flag:'🇮🇹', monthly:1700, internet:100, healthcare:8, pensionTaxPct:7, taxNote:'7% flat on foreign pensions for 10 yrs if moving to a southern town <20k residents (works near Lecce)', visa:'easy', visaNote:'Elective Residence Visa — proof of ~€32k/yr passive income', safety:9, climate:9, english:4, expat:5, air:9, walk:8, hub:5, note:'The 7% flat regime is a huge win. Baroque beauty, affordable, slow life. English a real barrier.' },
+  { id:'bologna', name:'Bologna', country:'Italy', flag:'🇮🇹', monthly:2200, internet:100, healthcare:9, pensionTaxPct:30, taxNote:'23-43% progressive (standard, not 7% zone)', visa:'easy', visaNote:'Elective Residence Visa', safety:9, climate:7, english:5, expat:6, air:7, walk:10, hub:7, note:'Best food in Italy, best healthcare in Italy, most walkable centre in Italy. Winters are grey.' },
+  { id:'lucca', name:'Lucca', country:'Italy', flag:'🇮🇹', monthly:2000, internet:100, healthcare:9, pensionTaxPct:30, taxNote:'23-43% progressive', visa:'easy', visaNote:'Elective Residence Visa', safety:10, climate:8, english:6, expat:8, air:8, walk:10, hub:6, note:'Walled Tuscan town. Walkable, well-preserved, warm expat scene. 30 min to Pisa airport.' },
+
+  // Greece — 7% flat for pensioners (fantastic regime)
+  { id:'athens-r', name:'Athens', country:'Greece', flag:'🇬🇷', monthly:1500, internet:100, healthcare:7, pensionTaxPct:7, taxNote:'7% flat on foreign pensions for 15 years if new tax resident', visa:'easy', visaNote:'FIP visa for financially independent retirees — ~€24k/yr income', safety:7, climate:10, english:7, expat:7, air:6, walk:8, hub:9, note:'Dirt cheap. 7% pension tax. Direct flights everywhere. Smog + traffic can wear.' },
+  { id:'chania', name:'Chania (Crete)', country:'Greece', flag:'🇬🇷', monthly:1400, internet:100, healthcare:7, pensionTaxPct:7, taxNote:'7% flat for pensioners (15 yr regime)', visa:'easy', visaNote:'FIP visa', safety:10, climate:10, english:6, expat:7, air:10, walk:7, hub:5, note:'Venetian harbour town. Island life + mild winters. Air connectivity is the trade-off.' },
+
+  // France — expensive but world-class healthcare
+  { id:'nice', name:'Nice', country:'France', flag:'🇫🇷', monthly:2800, internet:200, healthcare:10, pensionTaxPct:30, taxNote:'11-45% progressive · US-France tax treaty taxes US pensions in US only', visa:'medium', visaNote:'Long-stay Visitor Visa — proof of passive income + no work allowed', safety:8, climate:10, english:6, expat:7, air:7, walk:9, hub:7, note:'Côte d\'Azur + French healthcare + US pension exemption via treaty. Pricey but exceptional.' },
+  { id:'montpellier', name:'Montpellier', country:'France', flag:'🇫🇷', monthly:2200, internet:200, healthcare:10, pensionTaxPct:30, taxNote:'11-45% progressive · US treaty same as above', visa:'medium', visaNote:'Long-stay Visitor Visa', safety:8, climate:9, english:6, expat:6, air:8, walk:9, hub:6, note:'Student-city energy + Med climate + top healthcare. Cheaper than Nice.' },
+
+  // Mexico — Lake Chapala is the retiree benchmark
+  { id:'ajijic', name:'Lake Chapala / Ajijic', country:'Mexico', flag:'🇲🇽', monthly:1500, internet:100, healthcare:7, pensionTaxPct:0, taxNote:'Foreign pensions typically not taxed if remitted properly · consult accountant', visa:'easy', visaNote:'Temporary Resident — ~$2500/mo income or $43k savings; Permanent after 4 yrs', safety:9, climate:10, english:9, expat:10, air:7, walk:7, hub:5, note:'The old-school benchmark. English spoken everywhere, best weather on Earth, highest expat density.' },
+  { id:'merida', name:'Mérida', country:'Mexico', flag:'🇲🇽', monthly:1500, internet:100, healthcare:8, pensionTaxPct:0, taxNote:'Foreign pensions typically not taxed', visa:'easy', visaNote:'Temporary Resident', safety:10, climate:7, english:6, expat:8, air:8, walk:7, hub:6, note:'Safest city in Mexico. Colonial beauty. Hot and humid May–Sep. Good private hospitals.' },
+  { id:'sanmiguel', name:'San Miguel de Allende', country:'Mexico', flag:'🇲🇽', monthly:1800, internet:100, healthcare:7, pensionTaxPct:0, taxNote:'Foreign pensions typically not taxed', visa:'easy', visaNote:'Temporary Resident', safety:9, climate:9, english:9, expat:10, air:8, walk:8, hub:5, note:'UNESCO colonial town. Famous arts scene. Dense American + Canadian retiree community.' },
+  { id:'pv', name:'Puerto Vallarta', country:'Mexico', flag:'🇲🇽', monthly:1700, internet:100, healthcare:8, pensionTaxPct:0, taxNote:'Foreign pensions typically not taxed', visa:'easy', visaNote:'Temporary Resident', safety:8, climate:7, english:8, expat:9, air:8, walk:7, hub:8, note:'Pacific beach town. LGBT-friendly. Humid summers. Good flight connections to the US.' },
+  { id:'ensenada', name:'Ensenada', country:'Mexico', flag:'🇲🇽', monthly:1400, internet:100, healthcare:7, pensionTaxPct:0, taxNote:'Foreign pensions typically not taxed', visa:'easy', visaNote:'Temporary Resident', safety:7, climate:9, english:7, expat:7, air:8, walk:6, hub:7, note:'Baja California wine country. 90 min to San Diego — easy family visits.' },
+
+  // Panama — Pensionado is still the gold-standard retirement visa
+  { id:'panamacity', name:'Panama City', country:'Panama', flag:'🇵🇦', monthly:1800, internet:150, healthcare:8, pensionTaxPct:0, taxNote:'Territorial tax — 0% on foreign pension income', visa:'easy', visaNote:'Pensionado visa — $1000/mo lifetime pension required · discounts on healthcare, flights, utilities', safety:7, climate:7, english:7, expat:8, air:7, walk:7, hub:9, note:'The classic retiree pick. Pensionado benefits + hub flights + USD economy. Hot humid year-round.' },
+  { id:'boquete', name:'Boquete', country:'Panama', flag:'🇵🇦', monthly:1500, internet:100, healthcare:7, pensionTaxPct:0, taxNote:'Territorial tax — 0% on foreign pensions', visa:'easy', visaNote:'Pensionado — $1000/mo pension', safety:9, climate:10, english:8, expat:10, air:10, walk:7, hub:5, note:'Highland retiree town. Spring weather year-round. Massive expat community. Hospital 45 min away.' },
+  { id:'coronado', name:'Coronado', country:'Panama', flag:'🇵🇦', monthly:1700, internet:100, healthcare:7, pensionTaxPct:0, taxNote:'Territorial tax', visa:'easy', visaNote:'Pensionado', safety:8, climate:8, english:7, expat:9, air:9, walk:6, hub:7, note:'Beach town 90 min from Panama City. Big gringo scene. Suburban feel.' },
+
+  // Costa Rica — pensioner-friendly for decades
+  { id:'atenas', name:'Atenas', country:'Costa Rica', flag:'🇨🇷', monthly:1800, internet:100, healthcare:8, pensionTaxPct:15, taxNote:'~15% effective on foreign pensions if tax resident · CCSS public healthcare included', visa:'easy', visaNote:'Pensionado — $1000/mo pension required · includes public healthcare (Caja)', safety:8, climate:10, english:7, expat:9, air:9, walk:6, hub:7, note:'National Geographic called the climate best in the world. Highlands near SJO airport.' },
+  { id:'tamarindo', name:'Tamarindo', country:'Costa Rica', flag:'🇨🇷', monthly:2000, internet:100, healthcare:7, pensionTaxPct:15, taxNote:'~15% effective', visa:'easy', visaNote:'Pensionado', safety:7, climate:7, english:8, expat:9, air:9, walk:6, hub:6, note:'Pacific beach town. Hot/humid most of year. Big surfer + retiree crowd.' },
+
+  // Thailand — low cost, decent healthcare
+  { id:'chiangmai-r', name:'Chiang Mai', country:'Thailand', flag:'🇹🇭', monthly:1200, internet:100, healthcare:8, pensionTaxPct:0, taxNote:'Foreign pensions not taxed if not remitted same year (now stricter — check with accountant)', visa:'easy', visaNote:'Non-Immigrant O-A Retirement visa — 50+ · $25k deposit or $2k/mo income · annual renewal', safety:9, climate:7, english:6, expat:10, air:4, walk:5, hub:7, note:'Cheap living + great hospitals + massive retiree scene. Burning season Feb-Apr brutal for lungs.' },
+  { id:'huahin', name:'Hua Hin', country:'Thailand', flag:'🇹🇭', monthly:1500, internet:100, healthcare:8, pensionTaxPct:0, taxNote:'Foreign pensions not taxed if structured right', visa:'easy', visaNote:'O-A Retirement visa', safety:9, climate:7, english:7, expat:9, air:7, walk:6, hub:5, note:'Royal seaside town. Big Scandinavian + Nordic retiree scene. Mellow pace.' },
+  { id:'phuket-r', name:'Phuket', country:'Thailand', flag:'🇹🇭', monthly:1800, internet:150, healthcare:8, pensionTaxPct:0, taxNote:'Foreign pensions not taxed if structured right', visa:'easy', visaNote:'O-A Retirement visa', safety:8, climate:7, english:7, expat:9, air:7, walk:5, hub:8, note:'Beach + good hospitals + direct flights. Pricier than mainland. Rainy season tough.' },
+
+  // Malaysia — MM2H just revamped, Penang the retiree favourite
+  { id:'penang', name:'Penang (George Town)', country:'Malaysia', flag:'🇲🇾', monthly:1500, internet:200, healthcare:10, pensionTaxPct:0, taxNote:'Foreign pensions not taxed if remitted after yr-end', visa:'easy', visaNote:'MM2H — 50+ needs $125k liquid + $7.5k/mo income · 5-yr renewable', safety:9, climate:7, english:9, expat:9, air:7, walk:7, hub:7, note:'Possibly best healthcare value in Asia. English, food, no visa issues. Humid year-round.' },
+  { id:'kl-r', name:'Kuala Lumpur', country:'Malaysia', flag:'🇲🇾', monthly:1800, internet:200, healthcare:10, pensionTaxPct:0, taxNote:'Foreign pensions not taxed if remitted after yr-end', visa:'easy', visaNote:'MM2H — same terms as Penang', safety:8, climate:7, english:10, expat:8, air:6, walk:7, hub:9, note:'Capital-city amenities + top-tier healthcare + English fluency. Pollution + heat the trade-offs.' },
+
+  // Philippines — SRRV is dead cheap
+  { id:'dumaguete', name:'Dumaguete', country:'Philippines', flag:'🇵🇭', monthly:1200, internet:50, healthcare:6, pensionTaxPct:0, taxNote:'Foreign pensions not taxed', visa:'easy', visaNote:'SRRV — Special Resident Retiree Visa · 50+ needs $20k deposit (reducible after some years)', safety:7, climate:7, english:9, expat:8, air:9, walk:6, hub:4, note:'University town, English everywhere, dirt cheap. Serious medical means a flight to Cebu or Manila.' },
+  { id:'cebu-r', name:'Cebu', country:'Philippines', flag:'🇵🇭', monthly:1500, internet:100, healthcare:8, pensionTaxPct:0, taxNote:'Foreign pensions not taxed', visa:'easy', visaNote:'SRRV', safety:7, climate:7, english:9, expat:7, air:6, walk:6, hub:7, note:'Beaches + hospitals + direct flights. English fluent. Traffic can be rough.' },
+
+  // Vietnam — no formal retirement visa but affordable
+  { id:'danang', name:'Da Nang', country:'Vietnam', flag:'🇻🇳', monthly:1200, internet:150, healthcare:7, pensionTaxPct:0, taxNote:'Foreign pensions not taxed in practice', visa:'medium', visaNote:'No retirement visa — long-stay via 1-yr tourist, business, or Vietnamese spouse route', safety:9, climate:7, english:6, expat:7, air:8, walk:7, hub:7, note:'Beach + central-coast charm + fast internet. Visa path less formal than Thailand.' },
+  { id:'nhatrang', name:'Nha Trang', country:'Vietnam', flag:'🇻🇳', monthly:1100, internet:100, healthcare:6, pensionTaxPct:0, taxNote:'Foreign pensions not taxed in practice', visa:'medium', visaNote:'No retirement visa — same long-stay routes as Da Nang', safety:8, climate:7, english:5, expat:7, air:8, walk:7, hub:5, note:'Coastal + warm + cheap. Russian + European retirees here. English spotty.' },
+
+  // Ecuador — Cuenca is the Americas benchmark
+  { id:'cuenca', name:'Cuenca', country:'Ecuador', flag:'🇪🇨', monthly:1400, internet:100, healthcare:8, pensionTaxPct:0, taxNote:'Foreign pensions not taxed · IESS public healthcare ~$80/mo for couple', visa:'easy', visaNote:'Pensioner visa — $800/mo pension or ~$1200 for a couple', safety:8, climate:10, english:7, expat:10, air:9, walk:8, hub:5, note:'The Americas retirement benchmark. Spring weather at 2500m. Dense expat community. Dollar economy.' },
+
+  // Colombia — healthcare system punches above weight
+  { id:'medellin-r', name:'Medellín', country:'Colombia', flag:'🇨🇴', monthly:1500, internet:150, healthcare:9, pensionTaxPct:19, taxNote:'19-39% progressive if resident · tax treaty with some countries', visa:'easy', visaNote:'Migrante Pensionado — ~$750/mo pension', safety:7, climate:9, english:4, expat:8, air:7, walk:7, hub:7, note:'Eternal spring + top-rated private healthcare + $1500 lives well. Spanish is a must.' },
+
+  // Uruguay — stable, safe, long tax exemption
+  { id:'montevideo', name:'Montevideo', country:'Uruguay', flag:'🇺🇾', monthly:2000, internet:200, healthcare:8, pensionTaxPct:0, taxNote:'Foreign-source income exempt for 11 yrs then 7% flat', visa:'easy', visaNote:'Rentista visa — ~$1500/mo passive income', safety:8, climate:7, english:5, expat:7, air:9, walk:8, hub:6, note:'The "Switzerland of South America". Safe, stable, mild. Expensive for the region.' },
+
+  // Belize — English-speaking, QRP is cheap
+  { id:'ambergris', name:'Ambergris Caye', country:'Belize', flag:'🇧🇿', monthly:2000, internet:50, healthcare:5, pensionTaxPct:0, taxNote:'QRP = 0% on foreign income · annual program fee', visa:'easy', visaNote:'QRP (Qualified Retired Persons) — 45+ needs $2k/mo pension/annuity', safety:7, climate:8, english:10, expat:9, air:10, walk:6, hub:5, note:'Caribbean + English + 0% foreign tax. Medical needs are a flight to Mexico or Miami.' },
+
+  // UAE — zero tax, modern infrastructure
+  { id:'dubai-r', name:'Dubai', country:'UAE', flag:'🇦🇪', monthly:3500, internet:300, healthcare:9, pensionTaxPct:0, taxNote:'0% personal income tax · 0% on pensions', visa:'easy', visaNote:'Retirement Visa — 55+ · $50k savings OR $20k/mo income OR property owned', safety:10, climate:5, english:10, expat:10, air:6, walk:7, hub:10, note:'Zero tax + world-class services + direct flights everywhere. Summers (May–Oct) are brutal.' },
+
+  // Cyprus — non-dom status is a tax win
+  { id:'limassol', name:'Limassol', country:'Cyprus', flag:'🇨🇾', monthly:2200, internet:200, healthcare:8, pensionTaxPct:5, taxNote:'5% flat tax option on foreign pensions above €3,420/yr', visa:'easy', visaNote:'Pensioner residence — proof of ~€10k/yr pension (couple a bit more)', safety:10, climate:10, english:9, expat:9, air:8, walk:7, hub:6, note:'EU + English + 5% pension tax + Med climate. Flight connections modest.' },
+
+  // Malta — Malta Retirement Programme
+  { id:'valletta', name:'Valletta', country:'Malta', flag:'🇲🇹', monthly:2200, internet:200, healthcare:9, pensionTaxPct:15, taxNote:'Malta Retirement Programme — 15% flat on foreign pensions · min €7,500 tax/yr', visa:'easy', visaNote:'MRP — property purchase or long rent + health insurance', safety:9, climate:9, english:10, expat:8, air:8, walk:8, hub:6, note:'EU + English (official language) + Med climate. Small island, limited green space.' },
+
+  // Montenegro — EU candidate, 9% flat
+  { id:'kotor', name:'Kotor', country:'Montenegro', flag:'🇲🇪', monthly:1500, internet:100, healthcare:6, pensionTaxPct:9, taxNote:'9% flat personal income · pension taxed at same rate', visa:'easy', visaNote:'Temporary residence via property purchase (~€100k+) or long rental', safety:9, climate:8, english:6, expat:5, air:9, walk:7, hub:5, note:'Dramatic Adriatic bay. EU candidate. Low tax but healthcare is modest.' },
+
+  // Croatia — digital-nomad-style long-stay
+  { id:'split', name:'Split', country:'Croatia', flag:'🇭🇷', monthly:1700, internet:150, healthcare:8, pensionTaxPct:20, taxNote:'20-30% progressive · pension taxed at normal rates', visa:'medium', visaNote:'Temporary residence via sufficient means — $45k+ in bank · annual renewal', safety:10, climate:9, english:7, expat:7, air:8, walk:9, hub:6, note:'Diocletian\'s palace town. Safe + walkable + beach. Tax less favourable than Portugal/Greece.' },
+
+  // Turkey — Antalya is a European retiree magnet
+  { id:'antalya-r', name:'Antalya', country:'Turkey', flag:'🇹🇷', monthly:1200, internet:100, healthcare:7, pensionTaxPct:15, taxNote:'15-40% progressive · lira volatility helps/hurts', visa:'easy', visaNote:'Residence permit — short-term then renewable; property-based options', safety:8, climate:9, english:5, expat:8, air:7, walk:7, hub:7, note:'Riviera on the cheap. Big Russian + European retiree scene. Lira volatility a factor.' },
+
+  // Argentina — crisis-economy pricing in USD
+  { id:'buenosaires-r', name:'Buenos Aires', country:'Argentina', flag:'🇦🇷', monthly:1200, internet:100, healthcare:8, pensionTaxPct:0, taxNote:'Foreign pensions not taxed for retirees who don\'t work locally', visa:'easy', visaNote:'Rentista visa — ~$2000/mo passive income', safety:6, climate:7, english:5, expat:7, air:7, walk:9, hub:7, note:'European-style city on South American prices. Private healthcare excellent and affordable.' },
+
+  // Chile — stable, decent healthcare
+  { id:'santiago', name:'Santiago', country:'Chile', flag:'🇨🇱', monthly:1800, internet:200, healthcare:8, pensionTaxPct:0, taxNote:'Foreign pensions typically not taxed for new residents (first 3 yrs exempt, extendable)', visa:'easy', visaNote:'Rentista / Pensionado path — proof of sufficient means', safety:8, climate:7, english:5, expat:7, air:6, walk:8, hub:7, note:'The most stable economy in South America. Air quality in winter is the catch.' },
+
+  // Japan — hard visa but world-class if you can get in
+  { id:'fukuoka', name:'Fukuoka', country:'Japan', flag:'🇯🇵', monthly:2200, internet:200, healthcare:10, pensionTaxPct:20, taxNote:'5-55% progressive; retirement income has special treatment', visa:'hard', visaNote:'No dedicated retirement visa — long-term via family, highly-skilled, or spouse routes', safety:10, climate:7, english:4, expat:5, air:9, walk:9, hub:7, note:'Best healthcare on Earth + extreme safety + delicious food. Visa + language are the walls.' },
+
+  // Australia — expensive but excellent
+  { id:'goldcoast', name:'Gold Coast', country:'Australia', flag:'🇦🇺', monthly:3000, internet:150, healthcare:9, pensionTaxPct:25, taxNote:'0-45% progressive · Medicare included for permanent residents', visa:'hard', visaNote:'No simple retirement visa (previous SIR visa closed) — parent/family routes or investor visas', safety:9, climate:9, english:10, expat:7, air:9, walk:7, hub:7, note:'Beaches, English, Medicare — but the visa path is tough and the cost is high.' },
+
+  // New Zealand
+  { id:'auckland', name:'Auckland', country:'New Zealand', flag:'🇳🇿', monthly:2800, internet:150, healthcare:9, pensionTaxPct:20, taxNote:'10.5-39% progressive · pension income taxed at same rates', visa:'hard', visaNote:'Parent Visa + Investor Visa paths · retirement-specific closed', safety:10, climate:8, english:10, expat:7, air:10, walk:7, hub:6, note:'Pristine environment + top healthcare + safety 10/10. Visa path hard, cost high.' },
+];
+
+// ---- Scoring ----
+function visaScore(v) { return v === 'easy' ? 10 : v === 'medium' ? 6 : 2; }
+function retireScore(c) {
+  const costScore = Math.max(0, Math.min(10, 10 - (c.monthly - 1000) / 300));
+  const pensionTaxScore = Math.max(0, Math.min(10, 10 - c.pensionTaxPct / 5));
+  const parts = [
+    [c.healthcare, 15],
+    [visaScore(c.visa), 15],
+    [costScore, 15],
+    [c.safety, 10],
+    [c.climate, 10],
+    [c.english, 8],
+    [pensionTaxScore, 8],
+    [c.expat, 6],
+    [c.air, 6],
+    [c.walk, 4],
+    [c.hub, 3],
+  ];
+  const totalWeight = parts.reduce((s, [, w]) => s + w, 0);
+  const score = parts.reduce((s, [v, w]) => s + v * w, 0) / totalWeight;
+  return Math.round(score * 10);
+}
+
+CITIES.forEach(c => {
+  c.score = retireScore(c);
+  c.visaScore = visaScore(c.visa);
+});
+
+// ---- State ----
+const state = {
+  sortKey: 'score',
+  sortDir: -1,
+  search: '',
+  visa: 'all',
+  maxCost: 999999,
+  minHealth: 0,
+};
+
+// ---- Render ----
+function render() {
+  const q = state.search.trim().toLowerCase();
+  let rows = CITIES.filter(c =>
+    (state.visa === 'all' || c.visa === state.visa) &&
+    (c.monthly <= state.maxCost) &&
+    (c.healthcare >= state.minHealth) &&
+    (!q || c.name.toLowerCase().includes(q) || c.country.toLowerCase().includes(q))
+  );
+  rows.sort((a, b) => {
+    const av = a[state.sortKey], bv = b[state.sortKey];
+    if (typeof av === 'number') return (av - bv) * state.sortDir;
+    return String(av).localeCompare(String(bv)) * state.sortDir;
+  });
+
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = rows.map((c, i) => {
+    const scoreCls = c.score >= 70 ? 'high' : c.score >= 55 ? 'mid' : 'low';
+    return `
+      <tr onclick="openCity('${c.id}')">
+        <td class="rank">${i + 1}</td>
+        <td class="city">
+          <div class="city-cell">
+            <span class="flag">${c.flag}</span>
+            <div>
+              <div class="city-name">${c.name}</div>
+              <div class="country">${c.country}</div>
+            </div>
+          </div>
+        </td>
+        <td class="num"><span class="score ${scoreCls}">${c.score}</span></td>
+        <td class="num" data-label="$/mo">$ ${c.monthly.toLocaleString()}</td>
+        <td class="num" data-label="Healthcare">${c.healthcare}</td>
+        <td class="num" data-label="Pens tax">${c.pensionTaxPct} %</td>
+        <td class="num" data-label="Visa"><span class="pill visa-${c.visa}">${c.visa}</span></td>
+        <td class="num" data-label="Safety">${c.safety}</td>
+        <td class="num" data-label="Climate">${c.climate}</td>
+        <td class="num" data-label="English">${c.english}</td>
+      </tr>
+    `;
+  }).join('');
+
+  document.querySelectorAll('thead th').forEach(th => {
+    const k = th.dataset.k;
+    th.classList.toggle('sorted', k === state.sortKey);
+    const arrow = th.querySelector('.arrow');
+    if (arrow && k === state.sortKey) arrow.textContent = state.sortDir === -1 ? '↓' : '↑';
+    else if (arrow) arrow.textContent = '↕';
+  });
+}
+
+// ---- Interactions ----
+document.querySelectorAll('thead th[data-k]').forEach(th => {
+  th.onclick = () => {
+    const k = th.dataset.k;
+    if (state.sortKey === k) state.sortDir *= -1;
+    else { state.sortKey = k; state.sortDir = typeof CITIES[0][k] === 'number' ? -1 : 1; }
+    render();
+  };
+});
+document.getElementById('search').oninput = (e) => { state.search = e.target.value; render(); };
+document.querySelectorAll('#filter-visa button').forEach(b => {
+  b.onclick = () => {
+    state.visa = b.dataset.v;
+    document.querySelectorAll('#filter-visa button').forEach(x => x.classList.toggle('on', x === b));
+    render();
+  };
+});
+document.querySelectorAll('#filter-cost button').forEach(b => {
+  b.onclick = () => {
+    state.maxCost = +b.dataset.c;
+    document.querySelectorAll('#filter-cost button').forEach(x => x.classList.toggle('on', x === b));
+    render();
+  };
+});
+document.querySelectorAll('#filter-health button').forEach(b => {
+  b.onclick = () => {
+    state.minHealth = +b.dataset.h;
+    document.querySelectorAll('#filter-health button').forEach(x => x.classList.toggle('on', x === b));
+    render();
+  };
+});
+
+// ---- Modal ----
+function openCity(id) {
+  const c = CITIES.find(x => x.id === id);
+  if (!c) return;
+  const modal = document.getElementById('modal');
+  const scoreCls = c.score >= 70 ? 'high' : c.score >= 55 ? 'mid' : 'low';
+  modal.innerHTML = `
+    <div class="modal-head">
+      <div>
+        <h2>${c.flag} ${c.name}</h2>
+        <div class="modal-sub">${c.country} · Retire Score <span class="score ${scoreCls}">${c.score}</span></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-stats">
+      <div class="modal-stat"><div class="k">Monthly cost</div><div class="v">$ ${c.monthly.toLocaleString()}</div></div>
+      <div class="modal-stat"><div class="k">Healthcare</div><div class="v">${c.healthcare} / 10</div></div>
+      <div class="modal-stat"><div class="k">Pension tax</div><div class="v">${c.pensionTaxPct} %</div></div>
+      <div class="modal-stat"><div class="k">Visa</div><div class="v"><span class="pill visa-${c.visa}">${c.visa}</span></div></div>
+      <div class="modal-stat"><div class="k">Safety</div><div class="v">${c.safety} / 10</div></div>
+      <div class="modal-stat"><div class="k">Climate</div><div class="v">${c.climate} / 10</div></div>
+      <div class="modal-stat"><div class="k">English</div><div class="v">${c.english} / 10</div></div>
+      <div class="modal-stat"><div class="k">Expat community</div><div class="v">${c.expat} / 10</div></div>
+      <div class="modal-stat"><div class="k">Air quality</div><div class="v">${c.air} / 10</div></div>
+      <div class="modal-stat"><div class="k">Walkability</div><div class="v">${c.walk} / 10</div></div>
+      <div class="modal-stat"><div class="k">Flight hub</div><div class="v">${c.hub} / 10</div></div>
+      <div class="modal-stat"><div class="k">Internet</div><div class="v">${c.internet} Mbps</div></div>
+    </div>
+    <div class="modal-note" style="margin-bottom:10px;"><strong>Visa:</strong> ${c.visaNote}</div>
+    <div class="modal-note" style="margin-bottom:10px;"><strong>Tax:</strong> ${c.taxNote}</div>
+    <div class="modal-note">${c.note}</div>
+  `;
+  document.getElementById('modal-overlay').classList.add('on');
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('on'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+render();
+</script>
+</body>
+</html>
