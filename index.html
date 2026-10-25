@@ -265,21 +265,128 @@
   .explainer-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); }
   .explainer-row:last-child { border-bottom: none; }
   .explainer-row .w { color: var(--amber); font-variant-numeric: tabular-nums; }
+
+  /* Auth chip + add-city button + highlight row */
+  .user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    color: var(--text);
+    padding: 7px 12px 7px 10px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+  }
+  .user-chip:hover { border-color: var(--amber); color: var(--amber); }
+  .user-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+  .user-chip.anon .dot { background: var(--muted); }
+  .add-city-btn {
+    background: var(--surface);
+    border: 1px solid var(--border-2);
+    color: var(--text);
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+  .add-city-btn:hover { background: var(--surface-2); border-color: var(--amber); color: var(--amber); }
+  .city-badge-user {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--amber);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 4px;
+    vertical-align: middle;
+  }
+  tbody tr.just-added { animation: fadeHighlight 2.6s ease-out; }
+  @keyframes fadeHighlight {
+    0%   { background: rgba(245, 158, 11, 0.35); }
+    15%  { background: rgba(245, 158, 11, 0.35); }
+    100% { background: transparent; }
+  }
+
+  /* Form rows (shared across auth, feedback, add-city) */
+  .form-row { margin-bottom: 12px; }
+  .form-row label { display: block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .form-row input, .form-row textarea, .form-row select {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border-2);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+  }
+  .form-row textarea { resize: vertical; min-height: 72px; }
+  .form-row input:focus, .form-row textarea:focus, .form-row select:focus { outline: none; border-color: var(--text); }
+  .form-btn {
+    background: var(--amber);
+    color: #000;
+    border: 0;
+    padding: 11px 20px;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+  }
+  .form-btn:hover { background: #fbbf24; }
+  .form-status { margin-top: 10px; font-size: 12px; color: var(--muted); min-height: 16px; }
+  .form-status.ok { color: var(--green); }
+  .form-status.err { color: var(--red); }
+  .modal-tab-row { display: flex; gap: 2px; margin-bottom: 16px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 7px; padding: 3px; }
+  .modal-tab-row button {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    color: var(--muted);
+    padding: 8px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  .modal-tab-row button.on { background: var(--surface); color: var(--text); }
+  .feedback-item { background: var(--surface-2); border: 1px solid var(--border); border-left: 2px solid var(--border-2); border-radius: 0 6px 6px 0; padding: 10px 14px; margin-bottom: 8px; font-size: 13px; }
+  .feedback-item .who { font-size: 11px; color: var(--muted); margin-top: 6px; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <div class="title">Retire Cities</div>
-    <h1>Where should you retire?</h1>
-    <div class="subtitle">
-      45 cities ranked for a comfortable retirement — healthcare, pension-friendly tax, retirement-visa paths, safety, climate.
-      Opinionated. No ads. Updated as the world changes.
+  <header style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;">
+    <div>
+      <div class="title">Retire Cities</div>
+      <h1>Where should you retire?</h1>
+      <div class="subtitle">
+        <span id="city-count">45</span> cities ranked for a comfortable retirement — healthcare, pension-friendly tax, retirement-visa paths, safety, climate.
+        Opinionated. No ads. Updated as the world changes.
+      </div>
     </div>
+    <button id="user-chip" class="user-chip anon" onclick="openAuth()">
+      <span class="dot"></span>
+      <span id="user-label">Sign in</span>
+    </button>
   </header>
 
   <div class="filters">
     <input type="text" class="search" id="search" placeholder="Search city or country…" />
+    <button class="add-city-btn" onclick="openAddCity()">+ Add a city</button>
 
     <div style="display:flex;align-items:center;gap:4px;">
       <span class="filter-label">Visa</span>
@@ -348,12 +455,16 @@
   </div>
 
   <footer>
-    45 cities · opinions baked in · data audited Oct 2026 · <a href="https://github.com/stoiccapital" target="_blank">more at stoiccapital</a>
+    <span id="footer-count">45</span> cities · opinions baked in · data audited Oct 2026 · <a href="https://github.com/stoiccapital" target="_blank">more at stoiccapital</a>
   </footer>
 </div>
 
 <div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
   <div class="modal" id="modal"></div>
+</div>
+
+<div class="modal-overlay" id="auth-overlay" onclick="if(event.target===this)closeAuth()">
+  <div class="modal" id="auth-modal"></div>
 </div>
 
 <script>
@@ -524,6 +635,11 @@ function render() {
   });
 
   const tbody = document.getElementById('tbody');
+  const total = CITIES.length;
+  const countEl = document.getElementById('city-count');
+  const footerCount = document.getElementById('footer-count');
+  if (countEl) countEl.textContent = total;
+  if (footerCount) footerCount.textContent = total;
   tbody.innerHTML = rows.map((c, i) => {
     const scoreCls = c.score >= 70 ? 'high' : c.score >= 55 ? 'mid' : 'low';
     return `
@@ -533,7 +649,7 @@ function render() {
           <div class="city-cell">
             <span class="flag">${c.flag}</span>
             <div>
-              <div class="city-name">${c.name}</div>
+              <div class="city-name">${c.name}${c.isUser ? '<span class="city-badge-user">community</span>' : ''}</div>
               <div class="country">${c.country}</div>
             </div>
           </div>
@@ -621,14 +737,469 @@ function openCity(id) {
     </div>
     <div class="modal-note" style="margin-bottom:10px;"><strong>Visa:</strong> ${c.visaNote}</div>
     <div class="modal-note" style="margin-bottom:10px;"><strong>Tax:</strong> ${c.taxNote}</div>
-    <div class="modal-note">${c.note}</div>
+    <div class="modal-note" style="margin-bottom:14px;">${c.note}</div>
+    <button class="form-btn" style="margin-bottom:12px;" onclick="openCityForm(CITIES.find(x=>x.id==='${c.id}'))">
+      ✦ Share your experience of ${c.name}
+    </button>
+    <div id="city-contribs" style="margin-top:12px;"></div>
   `;
   document.getElementById('modal-overlay').classList.add('on');
+  loadCityContributions(c.id);
 }
 function closeModal() { document.getElementById('modal-overlay').classList.remove('on'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+// ========= Auth + Feedback + Add-city =========
+const AUTH_API = 'https://stoic-auth.hoangcn25.workers.dev';
+const PROJECT = 'retire-cities';
+let currentUser = null;
+let authTab = 'login';
+
+const CLIMATE_SCORE = { mild: 8, warm: 9, cold: 3, hot: 5, tropical: 6, dry: 6 };
+
+// Minimal world-cities list for the Add-a-city dropdown autofill.
+const WORLD_CITIES = [
+  {n:'Lisbon',c:'Portugal',f:'🇵🇹'},{n:'Porto',c:'Portugal',f:'🇵🇹'},{n:'Algarve',c:'Portugal',f:'🇵🇹'},{n:'Madeira',c:'Portugal',f:'🇵🇹'},{n:'Cascais',c:'Portugal',f:'🇵🇹'},
+  {n:'Valencia',c:'Spain',f:'🇪🇸'},{n:'Málaga',c:'Spain',f:'🇪🇸'},{n:'Alicante',c:'Spain',f:'🇪🇸'},{n:'Palma de Mallorca',c:'Spain',f:'🇪🇸'},{n:'Barcelona',c:'Spain',f:'🇪🇸'},{n:'Madrid',c:'Spain',f:'🇪🇸'},{n:'Seville',c:'Spain',f:'🇪🇸'},{n:'Granada',c:'Spain',f:'🇪🇸'},{n:'Tenerife',c:'Spain',f:'🇪🇸'},
+  {n:'Rome',c:'Italy',f:'🇮🇹'},{n:'Florence',c:'Italy',f:'🇮🇹'},{n:'Lucca',c:'Italy',f:'🇮🇹'},{n:'Bologna',c:'Italy',f:'🇮🇹'},{n:'Lecce',c:'Italy',f:'🇮🇹'},{n:'Puglia',c:'Italy',f:'🇮🇹'},{n:'Palermo',c:'Italy',f:'🇮🇹'},{n:'Venice',c:'Italy',f:'🇮🇹'},
+  {n:'Athens',c:'Greece',f:'🇬🇷'},{n:'Chania',c:'Greece',f:'🇬🇷'},{n:'Rhodes',c:'Greece',f:'🇬🇷'},{n:'Crete',c:'Greece',f:'🇬🇷'},
+  {n:'Nice',c:'France',f:'🇫🇷'},{n:'Montpellier',c:'France',f:'🇫🇷'},{n:'Marseille',c:'France',f:'🇫🇷'},{n:'Bordeaux',c:'France',f:'🇫🇷'},
+  {n:'Lake Chapala',c:'Mexico',f:'🇲🇽'},{n:'Mérida',c:'Mexico',f:'🇲🇽'},{n:'San Miguel de Allende',c:'Mexico',f:'🇲🇽'},{n:'Puerto Vallarta',c:'Mexico',f:'🇲🇽'},{n:'Ensenada',c:'Mexico',f:'🇲🇽'},{n:'Oaxaca',c:'Mexico',f:'🇲🇽'},{n:'Playa del Carmen',c:'Mexico',f:'🇲🇽'},
+  {n:'Panama City',c:'Panama',f:'🇵🇦'},{n:'Boquete',c:'Panama',f:'🇵🇦'},{n:'Coronado',c:'Panama',f:'🇵🇦'},
+  {n:'Atenas',c:'Costa Rica',f:'🇨🇷'},{n:'Tamarindo',c:'Costa Rica',f:'🇨🇷'},{n:'San José',c:'Costa Rica',f:'🇨🇷'},
+  {n:'Chiang Mai',c:'Thailand',f:'🇹🇭'},{n:'Hua Hin',c:'Thailand',f:'🇹🇭'},{n:'Phuket',c:'Thailand',f:'🇹🇭'},{n:'Bangkok',c:'Thailand',f:'🇹🇭'},
+  {n:'Penang',c:'Malaysia',f:'🇲🇾'},{n:'Kuala Lumpur',c:'Malaysia',f:'🇲🇾'},{n:'Langkawi',c:'Malaysia',f:'🇲🇾'},
+  {n:'Dumaguete',c:'Philippines',f:'🇵🇭'},{n:'Cebu',c:'Philippines',f:'🇵🇭'},
+  {n:'Da Nang',c:'Vietnam',f:'🇻🇳'},{n:'Nha Trang',c:'Vietnam',f:'🇻🇳'},{n:'Hoi An',c:'Vietnam',f:'🇻🇳'},
+  {n:'Cuenca',c:'Ecuador',f:'🇪🇨'},{n:'Quito',c:'Ecuador',f:'🇪🇨'},
+  {n:'Medellín',c:'Colombia',f:'🇨🇴'},{n:'Cartagena',c:'Colombia',f:'🇨🇴'},
+  {n:'Montevideo',c:'Uruguay',f:'🇺🇾'},
+  {n:'Ambergris Caye',c:'Belize',f:'🇧🇿'},
+  {n:'Dubai',c:'UAE',f:'🇦🇪'},
+  {n:'Limassol',c:'Cyprus',f:'🇨🇾'},{n:'Paphos',c:'Cyprus',f:'🇨🇾'},
+  {n:'Valletta',c:'Malta',f:'🇲🇹'},{n:'Sliema',c:'Malta',f:'🇲🇹'},
+  {n:'Kotor',c:'Montenegro',f:'🇲🇪'},{n:'Budva',c:'Montenegro',f:'🇲🇪'},
+  {n:'Split',c:'Croatia',f:'🇭🇷'},{n:'Dubrovnik',c:'Croatia',f:'🇭🇷'},
+  {n:'Antalya',c:'Turkey',f:'🇹🇷'},{n:'Alanya',c:'Turkey',f:'🇹🇷'},
+  {n:'Buenos Aires',c:'Argentina',f:'🇦🇷'},
+  {n:'Santiago',c:'Chile',f:'🇨🇱'},
+  {n:'Fukuoka',c:'Japan',f:'🇯🇵'},{n:'Tokyo',c:'Japan',f:'🇯🇵'},
+  {n:'Gold Coast',c:'Australia',f:'🇦🇺'},{n:'Perth',c:'Australia',f:'🇦🇺'},
+  {n:'Auckland',c:'New Zealand',f:'🇳🇿'},
+  {n:'Tbilisi',c:'Georgia',f:'🇬🇪'},{n:'Batumi',c:'Georgia',f:'🇬🇪'},
+];
+const WORLD_CITY_LOOKUP = Object.fromEntries(WORLD_CITIES.map(c => [c.n.toLowerCase(), c]));
+
+function escHTML(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function apiFetch(path, opts = {}) {
+  return fetch(AUTH_API + path, {
+    ...opts,
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
+  });
+}
+
+async function refreshMe() {
+  try {
+    const res = await apiFetch('/me');
+    if (res.ok) currentUser = await res.json();
+    else currentUser = null;
+  } catch { currentUser = null; }
+  renderUserChip();
+}
+
+function renderUserChip() {
+  const chip = document.getElementById('user-chip');
+  const label = document.getElementById('user-label');
+  if (currentUser) { chip.classList.remove('anon'); label.textContent = currentUser.username; }
+  else { chip.classList.add('anon'); label.textContent = 'Sign in'; }
+}
+
+function openAuth() {
+  if (currentUser) openFeedback();
+  else { authTab = 'login'; renderAuthModal(); document.getElementById('auth-overlay').classList.add('on'); }
+}
+function closeAuth() { document.getElementById('auth-overlay').classList.remove('on'); }
+
+function renderAuthModal() {
+  const el = document.getElementById('auth-modal');
+  const isLogin = authTab === 'login';
+  el.innerHTML = `
+    <div class="modal-head">
+      <div><h2 style="margin:0;">${isLogin ? 'Welcome back' : 'Create account'}</h2>
+        <div class="modal-sub">Needed to leave feedback or add a city — nothing else is stored.</div></div>
+      <button class="modal-close" onclick="closeAuth()">×</button>
+    </div>
+    <div class="modal-tab-row">
+      <button class="${isLogin ? 'on' : ''}" onclick="setAuthTab('login')">Login</button>
+      <button class="${!isLogin ? 'on' : ''}" onclick="setAuthTab('register')">Register</button>
+    </div>
+    ${!isLogin ? `<div class="form-row"><label>Username</label><input id="auth-username" placeholder="your_handle" maxlength="24" /></div>` : ''}
+    <div class="form-row"><label>Email</label><input id="auth-email" type="email" placeholder="you@example.com" /></div>
+    <div class="form-row"><label>Password${!isLogin ? ' (8+ chars)' : ''}</label><input id="auth-password" type="password" /></div>
+    <button class="form-btn" onclick="${isLogin ? 'doLogin()' : 'doRegister()'}">${isLogin ? 'Login' : 'Create account'}</button>
+    <div class="form-status" id="auth-status"></div>
+  `;
+}
+function setAuthTab(tab) { authTab = tab; renderAuthModal(); }
+
+async function doLogin() {
+  const status = document.getElementById('auth-status');
+  status.textContent = 'Signing in…'; status.className = 'form-status';
+  const email = document.getElementById('auth-email').value;
+  const password = document.getElementById('auth-password').value;
+  const res = await apiFetch('/login', { method: 'POST', body: JSON.stringify({ email, password }) });
+  const data = await res.json();
+  if (res.ok) { currentUser = data; renderUserChip(); closeAuth(); openFeedback(); }
+  else { status.textContent = data.error || 'Failed'; status.className = 'form-status err'; }
+}
+
+async function doRegister() {
+  const status = document.getElementById('auth-status');
+  status.textContent = 'Creating…'; status.className = 'form-status';
+  const username = document.getElementById('auth-username').value;
+  const email = document.getElementById('auth-email').value;
+  const password = document.getElementById('auth-password').value;
+  const res = await apiFetch('/register', { method: 'POST', body: JSON.stringify({ username, email, password }) });
+  const data = await res.json();
+  if (res.ok) { currentUser = data; renderUserChip(); closeAuth(); openFeedback(); }
+  else { status.textContent = data.error || 'Failed'; status.className = 'form-status err'; }
+}
+
+async function doLogout() {
+  await apiFetch('/logout', { method: 'POST' });
+  currentUser = null;
+  renderUserChip();
+  closeAuth();
+}
+
+function openFeedback() {
+  const el = document.getElementById('auth-modal');
+  el.innerHTML = `
+    <div class="modal-head">
+      <div><h2 style="margin:0;">Leave feedback</h2>
+        <div class="modal-sub">Logged in as <strong>${escHTML(currentUser.username)}</strong> · <a href="#" onclick="doLogout();return false;" style="color:var(--muted);text-decoration:underline;">log out</a></div></div>
+      <button class="modal-close" onclick="closeAuth()">×</button>
+    </div>
+    <div class="form-row">
+      <label>What's missing / what's wrong?</label>
+      <textarea id="fb-text" placeholder="A city to add, a visa fact to fix, a tax rate that drifted, anything…"></textarea>
+    </div>
+    <button class="form-btn" onclick="doFeedback()">Send feedback</button>
+    <div class="form-status" id="fb-status"></div>
+    <div class="feedback-list" id="feedback-list"><div style="color:var(--muted);font-size:12px;">Loading…</div></div>
+  `;
+  document.getElementById('auth-overlay').classList.add('on');
+  loadFeedback();
+}
+
+async function doFeedback() {
+  const status = document.getElementById('fb-status');
+  const text = document.getElementById('fb-text').value.trim();
+  if (!text) { status.textContent = 'Write something first.'; status.className = 'form-status err'; return; }
+  status.textContent = 'Sending…'; status.className = 'form-status';
+  const res = await apiFetch('/feedback', { method: 'POST', body: JSON.stringify({ project: PROJECT, text }) });
+  if (res.ok) {
+    document.getElementById('fb-text').value = '';
+    status.textContent = 'Thanks — saved.'; status.className = 'form-status ok';
+    loadFeedback();
+  } else {
+    const d = await res.json();
+    status.textContent = d.error || 'Failed'; status.className = 'form-status err';
+  }
+}
+
+async function loadFeedback() {
+  const el = document.getElementById('feedback-list');
+  if (!el) return;
+  try {
+    const res = await apiFetch('/feedback?project=' + encodeURIComponent(PROJECT) + '&limit=20');
+    const list = await res.json();
+    if (!list.length) { el.innerHTML = '<div style="color:var(--muted);font-size:12px;margin-top:10px;">No feedback yet. Be the first.</div>'; return; }
+    el.innerHTML = '<div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px;">Recent feedback</div>' + list.map(f => `
+      <div class="feedback-item">${escHTML(f.text)}<div class="who">— ${escHTML(f.username)} · ${new Date(f.created_at).toLocaleDateString()}</div></div>
+    `).join('');
+  } catch { el.innerHTML = '<div style="color:var(--red);font-size:12px;">Could not load feedback.</div>'; }
+}
+
+// ---- User-submitted cities (merged into CITIES on load) ----
+function normaliseUserCity(r) {
+  const city = {
+    id: `uc-${r.id}`,
+    name: r.name, country: r.country, flag: r.flag || '🏳',
+    monthly: r.monthly, internet: r.internet,
+    healthcare: r.healthcare ?? 7,
+    pensionTaxPct: r.pension_tax_pct ?? 20,
+    taxNote: r.tax_note || 'User-submitted; verify locally.',
+    visa: r.visa || 'medium',
+    visaNote: r.visa_note || 'User-submitted; verify locally.',
+    safety: r.safety ?? 7,
+    climate: r.climate ?? 6,
+    english: r.english ?? 5,
+    expat: r.community ?? 5,
+    air: r.air_quality ?? 6,
+    walk: r.walkability ?? 6,
+    hub: r.hub ?? 5,
+    note: r.note || '',
+    isUser: true, submittedBy: r.username,
+  };
+  city.score = retireScore(city);
+  city.visaScore = visaScore(city.visa);
+  return city;
+}
+
+async function loadUserCities() {
+  try {
+    const res = await apiFetch('/cities?project=' + encodeURIComponent(PROJECT));
+    if (!res.ok) return;
+    const list = await res.json();
+    const existingIds = new Set(CITIES.map(c => c.id));
+    for (const r of list) {
+      const uc = normaliseUserCity(r);
+      if (!existingIds.has(uc.id)) CITIES.push(uc);
+    }
+    render();
+  } catch {}
+}
+
+async function loadCityContributions(cityId) {
+  const el = document.getElementById('city-contribs');
+  if (!el) return;
+  try {
+    const res = await apiFetch('/city-contribution?city_id=' + encodeURIComponent(cityId) + '&limit=20');
+    const data = await res.json();
+    const list = data.contributions || [];
+    const agg = data.aggregates;
+    if (!list.length) {
+      el.innerHTML = '<div style="color:var(--muted);font-size:12px;">No user reports yet. Be the first.</div>';
+      return;
+    }
+    const aggHtml = agg ? `
+      <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:4px 0 8px;">Medians from ${agg.count} user${agg.count>1?'s':''}</div>
+      <div class="modal-stats" style="margin-bottom:12px;">
+        ${agg.monthly != null ? `<div class="modal-stat"><div class="k">Actual monthly</div><div class="v">$ ${Math.round(agg.monthly).toLocaleString()}</div></div>` : ''}
+        ${agg.rent_1br != null ? `<div class="modal-stat"><div class="k">Rent 1BR</div><div class="v">$ ${Math.round(agg.rent_1br).toLocaleString()}</div></div>` : ''}
+        ${agg.safety != null ? `<div class="modal-stat"><div class="k">Safety</div><div class="v">${agg.safety} / 10</div></div>` : ''}
+        ${agg.healthcare != null ? `<div class="modal-stat"><div class="k">Healthcare</div><div class="v">${agg.healthcare} / 10</div></div>` : ''}
+        ${agg.air_quality != null ? `<div class="modal-stat"><div class="k">Air quality</div><div class="v">${agg.air_quality} / 10</div></div>` : ''}
+      </div>
+    ` : '';
+    const items = list.map(r => `
+      <div class="feedback-item" style="border-left-color:var(--amber);">
+        ${r.pros ? `<div><strong style="color:var(--green);">+</strong> ${escHTML(r.pros)}</div>` : ''}
+        ${r.cons ? `<div style="margin-top:4px;"><strong style="color:var(--red);">−</strong> ${escHTML(r.cons)}</div>` : ''}
+        <div class="who">— ${escHTML(r.username)} · ${r.stay_duration ? escHTML(r.stay_duration) + ' · ' : ''}${r.background ? escHTML(r.background) + ' · ' : ''}${new Date(r.created_at).toLocaleDateString()}</div>
+      </div>
+    `).join('');
+    el.innerHTML = aggHtml + items;
+  } catch { el.innerHTML = ''; }
+}
+
+// Unified "fill out a city" form — same shape for Add-a-city and Share-experience.
+function openCityForm(prefilled) {
+  if (!currentUser) { closeModal(); openAuth(); return; }
+  const existing = !!prefilled;
+  const title = existing ? `${prefilled.flag || ''} ${escHTML(prefilled.name)} — share your experience` : 'Add a city';
+  const subtitle = existing
+    ? 'Add a datapoint — fill in whatever you know.'
+    : 'A retirement-friendly city missing from the list.';
+
+  const el = document.getElementById('auth-modal');
+  el.innerHTML = `
+    <div class="modal-head">
+      <div><h2 style="margin:0;">${title}</h2>
+        <div class="modal-sub">${subtitle}</div></div>
+      <button class="modal-close" onclick="closeAuth()">×</button>
+    </div>
+    ${existing ? '' : `
+    <div class="form-row">
+      <label>City *</label>
+      <input id="cf-name" list="world-cities-list" placeholder="Start typing — country autofills" maxlength="48" autocomplete="off" oninput="autofillFromCityForm()" />
+      <datalist id="world-cities-list">
+        ${WORLD_CITIES.map(c => `<option value="${c.n}">${c.c}</option>`).join('')}
+      </datalist>
+      <div id="cf-city-hint" style="font-size:11px;color:var(--muted);margin-top:4px;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="form-row"><label>Country *</label><input id="cf-country" placeholder="autofills from city" maxlength="48" /></div>
+      <div class="form-row"><label>Flag emoji</label><input id="cf-flag" placeholder="autofills from city" maxlength="8" /></div>
+    </div>
+    `}
+
+    <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;">About you</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="form-row"><label>How long were you there</label>
+        <select id="cf-duration">
+          <option value="">—</option><option value="visited">visited</option><option value="1-3mo">1-3 months</option><option value="3-12mo">3-12 months</option><option value="1y+">1+ year</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Status</label>
+        <select id="cf-background">
+          <option value="">—</option><option value="solo">solo</option><option value="couple">couple</option><option value="family">with kids/family</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;">Hard numbers</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div class="form-row"><label>Monthly cost ($)${existing ? '' : ' *'}</label><input id="cf-monthly" type="number" placeholder="1500" /></div>
+      <div class="form-row"><label>Rent 1BR ($/mo)</label><input id="cf-rent" type="number" placeholder="1000" /></div>
+      <div class="form-row"><label>Internet (Mbps)${existing ? '' : ' *'}</label><input id="cf-internet" type="number" placeholder="100" /></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div class="form-row"><label>Visa path for retirees</label>
+        <select id="cf-visa">
+          <option value="">—</option>
+          <option value="easy">easy</option>
+          <option value="medium">medium</option>
+          <option value="hard">hard</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Pension tax %</label><input id="cf-pensiontax" type="number" step="0.1" placeholder="10" /></div>
+      <div class="form-row"><label>Climate</label>
+        <select id="cf-climate">
+          <option value="">—</option>
+          <option value="mild">Mild — year-round comfort</option>
+          <option value="warm">Warm — sunny most of year</option>
+          <option value="cold">Cold — harsh winter</option>
+          <option value="hot">Hot — brutal summer</option>
+          <option value="tropical">Tropical — hot + humid</option>
+          <option value="dry">Dry — arid</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;">Rate 1 (bad) → 10 (great)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+      <div class="form-row"><label>Healthcare</label><input id="cf-healthcare" type="number" min="1" max="10" /></div>
+      <div class="form-row"><label>Safety</label><input id="cf-safety" type="number" min="1" max="10" /></div>
+      <div class="form-row"><label>English</label><input id="cf-english" type="number" min="1" max="10" /></div>
+      <div class="form-row"><label>Expat community</label><input id="cf-expat" type="number" min="1" max="10" /></div>
+      <div class="form-row"><label>Air quality</label><input id="cf-air" type="number" min="1" max="10" /></div>
+      <div class="form-row"><label>Walkability</label><input id="cf-walk" type="number" min="1" max="10" /></div>
+      <div class="form-row"><label>Flight hub</label><input id="cf-hub" type="number" min="1" max="10" /></div>
+      <div class="form-row"><label>Food scene</label><input id="cf-food" type="number" min="1" max="10" /></div>
+      <div class="form-row"><label>Social scene</label><input id="cf-social" type="number" min="1" max="10" /></div>
+    </div>
+
+    <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px;">In your words</div>
+    <div class="form-row"><label>What's great about it</label><textarea id="cf-pros" rows="2" placeholder="Weather, hospitals, specific neighborhoods, expat scene…"></textarea></div>
+    <div class="form-row"><label>What's bad about it</label><textarea id="cf-cons" rows="2" placeholder="Bureaucracy, winters, specific gotchas…"></textarea></div>
+    <div class="form-row"><label>One-liner (optional)</label><input id="cf-note" placeholder="Why would a retiree consider it?" maxlength="500" /></div>
+
+    <button class="form-btn" onclick="submitCityForm(${existing ? `'${prefilled.id}'` : 'null'})">${existing ? 'Submit experience' : 'Add city'}</button>
+    <div class="form-status" id="cf-status"></div>
+  `;
+  document.getElementById('auth-overlay').classList.add('on');
+}
+
+function openAddCity() { openCityForm(null); }
+
+function autofillFromCityForm() {
+  const nameInput = document.getElementById('cf-name');
+  const countryInput = document.getElementById('cf-country');
+  const flagInput = document.getElementById('cf-flag');
+  const hint = document.getElementById('cf-city-hint');
+  const typed = nameInput.value.trim();
+  const match = WORLD_CITY_LOOKUP[typed.toLowerCase()];
+  if (match) {
+    if (!countryInput.value) countryInput.value = match.c;
+    if (!flagInput.value) flagInput.value = match.f;
+    const existing = CITIES.find(c => c.name.toLowerCase() === typed.toLowerCase());
+    if (existing) {
+      hint.textContent = `Already in the list — "Share your experience" from the city would be cleaner.`;
+      hint.style.color = 'var(--amber)';
+    } else {
+      hint.textContent = `${match.f} ${match.c} — autofilled.`;
+      hint.style.color = 'var(--muted)';
+    }
+  } else {
+    hint.textContent = '';
+  }
+}
+
+async function submitCityForm(existingCityId) {
+  const status = document.getElementById('cf-status');
+  const v = (id) => {
+    const el = document.getElementById(id);
+    const val = el ? el.value.trim() : '';
+    return val === '' ? null : val;
+  };
+  let cityId = existingCityId;
+
+  if (!cityId) {
+    const name = v('cf-name'), country = v('cf-country'), flag = v('cf-flag');
+    const monthly = v('cf-monthly'), internet = v('cf-internet');
+    if (!name || !country || !monthly || !internet) {
+      status.textContent = 'City, country, monthly cost, and internet are required.';
+      status.className = 'form-status err';
+      return;
+    }
+    status.textContent = 'Adding city…'; status.className = 'form-status';
+    const climateKey = v('cf-climate');
+    const cityBody = {
+      project: PROJECT,
+      name, country, flag,
+      visa: v('cf-visa') || 'medium',
+      monthly, internet,
+      healthcare: v('cf-healthcare'),
+      pension_tax_pct: v('cf-pensiontax'),
+      safety: v('cf-safety'),
+      air_quality: v('cf-air'),
+      walkability: v('cf-walk'),
+      climate: climateKey ? CLIMATE_SCORE[climateKey] : null,
+      hub: v('cf-hub'), english: v('cf-english'),
+      community: v('cf-expat'),  // expat community stored in community column
+      note: v('cf-note'),
+    };
+    const cityRes = await apiFetch('/city', { method: 'POST', body: JSON.stringify(cityBody) });
+    const cityData = await cityRes.json();
+    if (!cityRes.ok) {
+      status.textContent = cityData.error || 'Failed to add city';
+      status.className = 'form-status err';
+      return;
+    }
+    cityId = cityData.id;
+  }
+
+  status.textContent = 'Saving…'; status.className = 'form-status';
+  const contribBody = {
+    city_id: cityId,
+    monthly: v('cf-monthly'), internet: v('cf-internet'), rent_1br: v('cf-rent'),
+    safety: v('cf-safety'), air_quality: v('cf-air'), food_scene: v('cf-food'),
+    social_scene: v('cf-social'), coffee_scene: null, healthcare: v('cf-healthcare'),
+    stay_duration: v('cf-duration'), background: v('cf-background'),
+    pros: v('cf-pros'), cons: v('cf-cons'),
+  };
+  const res = await apiFetch('/city-contribution', { method: 'POST', body: JSON.stringify(contribBody) });
+  if (res.ok) {
+    status.textContent = 'Thanks — saved.'; status.className = 'form-status ok';
+    if (!existingCityId) {
+      await loadUserCities();
+      requestAnimationFrame(() => {
+        const row = Array.from(document.querySelectorAll('#tbody tr')).find(
+          r => r.getAttribute('onclick') && r.getAttribute('onclick').includes(`'${cityId}'`)
+        );
+        if (row) {
+          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          row.classList.add('just-added');
+          setTimeout(() => row.classList.remove('just-added'), 2600);
+        }
+      });
+    } else {
+      loadCityContributions(existingCityId);
+    }
+    setTimeout(() => closeAuth(), 700);
+  } else {
+    const d = await res.json();
+    status.textContent = d.error || 'Failed'; status.className = 'form-status err';
+  }
+}
+
 render();
+refreshMe();
+loadUserCities();
 </script>
 </body>
 </html>
